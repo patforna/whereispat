@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/boilerplate.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Where is Pat?</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="Header">Where is Pat?</h1>
+      <div class="tweet">
+        <ul>
+          <li><span class="blue">Last tweet: </span><%= @tweet %> <span class="gray">- 30/03/12 @ 18:25</span></li>
+          <li><span class="blue">Last known location: </span>51.554207, -0.104571</li>                    
+        </ul>
+      </div>
+    </div>
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+    <script defer src="js/global.js"></script>
+  </body>
+</html>
