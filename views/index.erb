@@ -8,11 +8,18 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="Header">Where is Pat?</h1>
+      <h1>Where is Pat?</h1>
       <div class="tweet">
         <ul>
-          <li><span class="blue">Last tweet: </span><%= @tweet %> <span class="gray">- 30/03/12 @ 18:25</span></li>
-          <li><span class="blue">Last known location: </span>51.554207, -0.104571</li>                    
+          <li class="last-tweet">
+            <span class="title">Last tweet: </span>
+            <span class="value"><%= @tweet.text %></span>
+            <span class="detail">| <%= @tweet.created_at %></span></li>
+          <li class="last-location">
+            <span class="title">Last known location: </span>
+            <span class="value"><%= @location.full_name %></span>
+            <span class="detail">| <%= @tweet.geo.latitude %>, <%= @tweet.geo.longitude %></span>
+          </li>                    
         </ul>
       </div>
     </div>
