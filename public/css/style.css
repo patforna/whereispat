@@ -28,9 +28,9 @@ h1 {
   background-color: black;
   margin-top: 27px;
   width: 940px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
   float: left;
   padding-top: 18px;
   padding-bottom: 15px;
