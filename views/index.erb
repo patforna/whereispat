@@ -14,9 +14,20 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_OeH5YFbLpgAObdY_FEVxPxHUuN5b6Jk&sensor=false"> </script>
     <script type="text/javascript">
        function initialize() {
-	 var myOptions = { center: new google.maps.LatLng(<%= @tweet.geo.latitude %>, <%= @tweet.geo.longitude %>), zoom: 15, mapTypeId: google.maps.MapTypeId.ROADMAP };
+
+         <% if !@tweet.geo.nil? %>
+	   var patLat = <% @tweet.geo.latitude %>;
+	   var patLng = <% @tweet.geo.longitude %>;
+         <% else %>
+           // this is timbuktu = lat 16.7770957947, long: -3.00905203819
+	   var patLat = 16.7770957947;
+	   var patLng = -3.00905203819;
+         <% end %>
+
+	 var myOptions = { center: new google.maps.LatLng(patLat,patLng ), zoom: 15, mapTypeId: google.maps.MapTypeId.ROADMAP };
+
          var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-         var marker = new google.maps.Marker({ position: new google.maps.LatLng(<%= @tweet.geo.latitude %>, <%= @tweet.geo.longitude %>), map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,
+         var marker = new google.maps.Marker({ position: new google.maps.LatLng(patLat,patLng), map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,
  });
        }
     </script>
@@ -40,11 +51,15 @@
           <li class="last-tweet">
             <span class="title">Last tweet: </span>
             <span class="value"><%= @tweet.text %></span>
-            <span class="detail">| <%= @tweet.created_at %></span></li>
+            <span class="detail">| <%= @tweet.created_at  %></span></li>
           <li class="last-location">
             <span class="title">Last known location: </span>
+            <% if !@location.nil? %>
             <span class="value"><%= @location.full_name %></span>
-            <span class="detail">| <%= @tweet.geo.latitude %>, <%= @tweet.geo.longitude %></span>
+            <span class="detail">| <%= @tweet.geo.latitude || 0.0 %>, <%= @tweet.geo.longitude || 0.0 %></span>
+            <% else %>
+            <span class="lost">No idea - he could be in Timbuktu for all I know!</span>
+            <% end %>
           </li>                    
         </ul>
       </div>

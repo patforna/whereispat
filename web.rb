@@ -10,7 +10,11 @@ Twitter.configure do |config|
 end
 
 get '/' do
-  @tweet = Twitter.user_timeline("patforna").first  
-  @location = Twitter.reverse_geocode(:lat => @tweet.geo.latitude, :long => @tweet.geo.longitude, :max_results => 1).first
+  @tweet = Twitter.user_timeline("patforna").first
+
+  if !@tweet.geo.nil?
+    @location = Twitter.reverse_geocode(:lat => @tweet.geo.latitude, :long => @tweet.geo.longitude, :max_results => 1).first
+  end
+
   erb :index
 end
