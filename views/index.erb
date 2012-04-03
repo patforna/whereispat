@@ -58,21 +58,23 @@
             <span class="detail">| <%= @last_tweet.created_at  %></span>
           </li>
           <% if !@location.nil? %>
-          <li class="last-location">
-            <span class="title">Last known location: </span>
-            <span class="value"><%= @location.full_name %></span>
-            <span class="detail">| <%= @last_tweet_with_a_location.geo.latitude || 0.0 %>, <%= @last_tweet_with_a_location.geo.longitude || 0.0 %></span>
-            <span class="detail">| <%= @last_tweet_with_a_location.created_at  %></span></li>
-          </li>                    
-          <li class="how-far">
-            <span class="title">Fresh Tracks: </span>
-            <span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
-          </li>
+            <li class="last-location">
+              <span class="title">Last known location: </span>
+              <span class="value"><%= @location.full_name %></span>
+              <span class="detail">| <%= @last_tweet_with_a_location.geo.latitude || 0.0 %>, <%= @last_tweet_with_a_location.geo.longitude || 0.0 %></span>
+              <span class="detail">| <%= @last_tweet_with_a_location.created_at  %></span></li>
+            </li> 
+            <% if @hours_since_last_tweet > 0 %>
+              <li class="how-far">
+                <span class="title">Fresh Tracks: </span>
+                <span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
+              </li>
+            <% end %>
           <% else %>
-          <li class="lost">
-            <span class="title">Last known location: </span>
-            <span class="value">No idea - he could be in Timbuktu for all I know!</span>
-          </li>
+            <li class="lost">
+              <span class="title">Last known location: </span>
+              <span class="value">No idea - he could be in Timbuktu for all I know!</span>
+            </li>
           <% end %>
         </ul>
       </div>
