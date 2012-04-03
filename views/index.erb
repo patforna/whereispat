@@ -2,9 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="/css/boilerplate.css">
     <link rel="stylesheet" href="/css/style.css">
     <title>Where is Pat?</title>
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+            #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_OeH5YFbLpgAObdY_FEVxPxHUuN5b6Jk&sensor=false"> </script>
+    <script type="text/javascript">
+       function initialize() {
+	 var myOptions = { center: new google.maps.LatLng(<%= @tweet.geo.latitude %>, <%= @tweet.geo.longitude %>), zoom: 15, mapTypeId: google.maps.MapTypeId.ROADMAP };
+         var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+         var marker = new google.maps.Marker({ position: new google.maps.LatLng(<%= @tweet.geo.latitude %>, <%= @tweet.geo.longitude %>), map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,
+ });
+       }
+    </script>
+      
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-30558770-1']);
@@ -16,7 +32,7 @@
       })();
     </script>    
   </head>
-  <body>
+  <body onload="initialize()">
     <div class="container">
       <h1>Where is Pat?</h1>
       <div class="tweet">
@@ -32,6 +48,7 @@
           </li>                    
         </ul>
       </div>
+      <div id="map_canvas" style="width:100%; height:500px"/>
     </div>
     <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
