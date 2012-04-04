@@ -33,13 +33,13 @@
          var marker = new google.maps.Marker({ position: patLocation, map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,
  });
 
-         var how_far_circle = new google.maps.Circle({center: patLocation, map: map,radius: <%= @how_far_might_he_have_gone * 1609 %>, fillColor:"red", fillOpacity: 0.2, strokeWeight: 2, strokeColor:"red", strokeOpacity:0.9});
+         var how_far_circle = new google.maps.Circle({center: patLocation, map: map,radius: <%= @how_far_might_he_have_gone * 1609 %>, fillColor:"#c30083", fillOpacity: 0.2, strokeWeight: 2, strokeColor:"#c30083", strokeOpacity:0.9});
          var pos_array = new Array();
 
          <% @past_locations.each {|location|  %>
             pos_array.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
          <% } %>
-         var where_he_has_been = new google.maps.Polyline({map: map, path: pos_array ,strokeColor: "black", strokeOpacity: 0.8,strokeWeight: 3});
+         var where_he_has_been = new google.maps.Polyline({map: map, path: pos_array ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3});
        }
     </script>
       
