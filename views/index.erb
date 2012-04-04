@@ -33,7 +33,7 @@
          var marker = new google.maps.Marker({ position: patLocation, map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,
  });
 
-         var how_far_circle = new google.maps.Circle({center: patLocation, map: map,radius: <%= @how_far_might_he_have_gone * 1609 %>, fillColor:"red", fillOpacity: 0.2, strokeColor:"red", strokeOpacity:0.9});
+         var how_far_circle = new google.maps.Circle({center: patLocation, map: map,radius: <%= @how_far_might_he_have_gone * 1609 %>, fillColor:"red", fillOpacity: 0.2, strokeWeight: 2, strokeColor:"red", strokeOpacity:0.9});
          var pos_array = new Array();
 
          <% @past_locations.each {|location|  %>
@@ -73,7 +73,7 @@
             </li> 
             <% if @hours_since_last_tweet > 0 %>
               <li class="how-far">
-                <span class="title">Fresh Tracks: </span>
+                <span class="title">Freshness: </span>
                 <span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
               </li>
             <% end %>
