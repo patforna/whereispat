@@ -41,7 +41,7 @@
             bounds.extend(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
             pos_array.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
          <% } %>
-         var where_he_has_been = new google.maps.Polyline({map: map, path: pos_array ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3});
+         var where_he_has_been = new google.maps.Polyline({map: map, path: pos_array ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3, geodesic: true});
 
          map.fitBounds(bounds);
        }

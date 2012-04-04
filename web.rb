@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'twitter'
 
-average_cycling_speed_mph = 15
+average_cycling_speed_mph = 5
 start_date = Time.new(2012,4,3)
 
 Twitter.configure do |config|                        
@@ -35,7 +35,7 @@ get '/' do
   @hours_since_last_tweet = ((Time.new() - @last_tweet.created_at) / 3600).round
   @how_far_might_he_have_gone = @hours_since_last_tweet * average_cycling_speed_mph
 
-  @last_location = Twitter.reverse_geocode(:lat => @last_tweet_with_a_location.geo.latitude, :long => @last_tweet_with_a_location.geo.longitude, :max_results => 1).first
+  @last_location = Twitter.reverse_geocode(:lat => @last_tweet_with_a_location.geo.latitude, :long => @last_tweet_with_a_location.geo.longitude, :max_results => 1, :granularity => "city").first
 
  
 
