@@ -24,6 +24,7 @@
 	   var patLng = -3.00905203819;
          <% end %>
 
+
          var patLocation = new google.maps.LatLng(patLat,patLng);
 
 	 var myOptions = { center: patLocation, zoom: 7, mapTypeId: google.maps.MapTypeId.ROADMAP };
@@ -33,6 +34,12 @@
  });
 
          var how_far_circle = new google.maps.Circle({center: patLocation, map: map,radius: <%= @how_far_might_he_have_gone * 1609 %>, fillColor:"red", fillOpacity: 0.2, strokeColor:"red", strokeOpacity:0.9});
+         var pos_array = new Array();
+
+         <% @past_locations.each {|location|  %>
+            pos_array.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
+         <% } %>
+         var where_he_has_been = new google.maps.Polyline({map: map, path: pos_array ,strokeColor: "black", strokeOpacity: 0.8,strokeWeight: 3});
        }
     </script>
       
@@ -57,10 +64,10 @@
             <span class="value"><%= @last_tweet.text %></span>
             <span class="detail">| <%= @last_tweet.created_at  %></span>
           </li>
-          <% if !@location.nil? %>
+          <% if !@last_location.nil? %>
             <li class="last-location">
               <span class="title">Last known location: </span>
-              <span class="value"><%= @location.full_name %></span>
+              <span class="value"><%= @last_location.full_name %></span>
               <span class="detail">| <%= @last_tweet_with_a_location.geo.latitude || 0.0 %>, <%= @last_tweet_with_a_location.geo.longitude || 0.0 %></span>
               <span class="detail">| <%= @last_tweet_with_a_location.created_at  %></span></li>
             </li> 
