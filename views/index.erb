@@ -15,9 +15,9 @@
     <script type="text/javascript">
        function initialize() {
 
-         <% if !@last_tweet_with_a_location.geo.nil? %>
-	   var patLat = <%= @last_tweet_with_a_location.geo.latitude %>;
-	   var patLng = <%= @last_tweet_with_a_location.geo.longitude %>;
+         <% if !@lookup_lat.nil? && !@lookup_long.nil? %>
+	   var patLat = <%= @lookup_lat %>;
+	   var patLng = <%= @lookup_long %>;
          <% else %>
            // this is timbuktu = lat 16.7770957947, long: -3.00905203819
 	   var patLat = 16.7770957947;
@@ -71,9 +71,9 @@
           <% if !@last_location.nil? %>
             <li class="last-location">
               <span class="title">Last known location: </span>
-              <span class="value"><%= @last_location.full_name %></span>
-              <span class="detail">| <%= @last_tweet_with_a_location.geo.latitude || 0.0 %>, <%= @last_tweet_with_a_location.geo.longitude || 0.0 %></span>
-              <span class="detail">| <%= @last_tweet_with_a_location.created_at  %></span></li>
+              <span class="value"><%= @last_location %></span>
+              <span class="detail">| <%= @lookup_lat || 0.0 %>, <%= @lookup_long || 0.0 %></span>
+              <span class="detail">| <%= @time_at_location  %></span></li>
             </li> 
             <% if @hours_since_last_tweet > 0 %>
               <li class="how-far">
