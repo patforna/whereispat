@@ -39,7 +39,7 @@ get '/' do
    
     # if the tweet has geo data and is after the start date... let's track it! 
     if  !lat.nil? && !long.nil? && (tweet.created_at <=> start_date) == 1
-      @past_locations.push({:lat => lat, :long => long, :time => tweet.created_at})
+      @past_locations.push({:lat => lat, :long => long, :time => tweet.created_at, :text => tweet.text })
     end
   }
 
