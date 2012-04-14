@@ -19,13 +19,18 @@ describe Place do
       should_parse "  foo 42.0,7.0", 42.0, 7.0     
     end
     
+    it "should fall back to Timbuktu if message can't be parsed" do
+      TIMBUKTU_LATITUDE = 16.7770957947
+      TIMBUKTU_LONGITUDE = -3.00905203819
+      should_parse "no geo data in here", TIMBUKTU_LATITUDE, TIMBUKTU_LONGITUDE      
+    end
+    
     private
     def should_parse(message, latitude, longitude)
       place = Place.parse message
       place.latitude.should == latitude
       place.longitude.should == longitude      
-    end
-    
+    end    
   end
 end
 
