@@ -1,111 +1,235 @@
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="/css/boilerplate.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <title>Where is Pat?</title>
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-            #map_canvas { height: 100% }
-    </style>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_OeH5YFbLpgAObdY_FEVxPxHUuN5b6Jk&sensor=false"> </script>
-    <script type="text/javascript">
-       function initialize() {
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+		<link rel="stylesheet" href="/css/boilerplate.css" type="text/css"/>
+		<link rel="stylesheet" href="/css/style.css" type="text/css" />
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<title>Where is Pat?</title>
+		<style type="text/css">
+html { height: 100% }
+		body { height: 100%; margin: 0; padding: 0 }
+			#map_canvas { height: 600px }
+			#graph {height: 200px;}
+		</style>
+		<<script type="text/javascript" src="/js/libs/protovis.min.js">
+</script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_OeH5YFbLpgAObdY_FEVxPxHUuN5b6Jk&sensor=false">
+</script>
+		<script type="text/javascript+protovis">
+			var height = 200;
+			var width = 940;
+			
+			var elevationService = new google.maps.ElevationService();
+			var locations = new Array();
+			<% @past_locations.each {|location_data| %>
+				locations.push(new google.maps.LatLng(<%= location_data[:lat] %>,<%= location_data[:long] %>));
+			<% } %>
+			
+			var positionalRequest = {'locations': locations};
+			
+			var elevations = new Array();
+			
+			elevationService.getElevationForLocations(positionalRequest,function(results, status) {
+				if (status == google.maps.ElevationStatus.OK) {
+					elevations = results;
+				}
+				});
+		
+			distanceScale = pv.Scale.linear(0, <%= @total_distance.round %>).range(0, width);
+			timeScale = pv.Scale.linear(0, <%= @total_time.round %>).range(0, width);
+			speedScale = pv.Scale.linear(0,30).range(0,height);
+		
+			var speeds = new Array();
+			
+			var distance_time_speeds_array = new Array();
+			<% @distance_time_speeds.each{|data_point| %>
+				distance_time_speeds_array.push({	culmulative_distance_in_kilometers:<%= data_point[:culmulative_distance_in_kilometers]%>,
+													distance_in_kilometers: <%=data_point[:distance_in_kilometers]%>,
+													culmulative_time_in_hours: <%=data_point[:culmulative_time_in_hours]%>,
+													time_diff_in_hours:<%=data_point[:time_diff_in_hours]%>,
+													speed_in_kph:<%=data_point[:speed_in_kph]%>
+												});
+			<% } %>
+		
+		
+		
+			var vis = new pv.Panel().canvas('graph')
+				.height(height)
+				.width(width)
+				.bottom(40)
+				.left(20)
+				.right(10)
+				.top(5);
+			
+			//This line plots speed over time - where time is correctly spread along the x axis
+			vis.add(pv.Line)
+				.data(distance_time_speeds_array)
+				.left(function(d){  var value = d.culmulative_time_in_hours;
+									var scaledValue = timeScale(value);
+									console.log(""+this.index+" - "+value+" -> "+scaledValue);
+									return scaledValue;
+								})
+				.bottom(function(d){var value = d.speed_in_kph;
+									var scaledValue = speedScale(value);
+									console.log(""+this.index+" - "+value+" -> "+scaledValue);
+									return scaledValue;})
+				.lineWidth(2).add(pv.Dot);
+			
+			/* Y axis */
+			vis.add(pv.Rule)
+				.data(speedScale.ticks(10))
+				.bottom(speedScale)
+				//.strokeStyle(function(d) d ? "#eee" : "#000")
+				.anchor("left").add(pv.Label)
+				.text(speedScale.tickFormat);
+				
+			/* X-axis and ticks. */
+			vis.add(pv.Rule)
+				.data(timeScale.ticks(10))
+				//.visible(function(d) d)
+				.left(timeScale)
+				.bottom(-5)
+				.height(5)
+				.anchor("bottom").add(pv.Label)
+				.text(timeScale.tickFormat);	
+			
+			//vis.add(pv.Label).text("Avg. Speed in kph").left(5).bottom(height-30);
+			//vis.add(pv.Label).text("Time in hours").left(width / 2).bottom(-30);
+			
+			/*vis.add(pv.Line)
+				.height(height)
+				.width(width)
+				.data(distance_time_speeds_array)
+				.left(function(d){  var value = d.culmulative_distance_in_kilometers;
+									var scaledValue = distanceScale(value);
+									console.log(""+this.index+" - "+value+" -> "+scaledValue);
+									return scaledValue;
+								})
+				.bottom(function(d){console.log(d.speed_in_kph);return  d.speed_in_kph})
+				.lineWidth(2);*/
+			
+			vis.render();
+		
+		</script>
+		<script type="text/javascript">
+		function initialize() {
+		
+		//A couple of custom images for the map markers	
+		var twitterMarkerImage = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null,null,null,new google.maps.Size(35,35));
+		var bicycleMarkerImage = new google.maps.MarkerImage('/images/bicycle_50.png', null,null,null,null);
 
-         <% if !@lookup_lat.nil? && !@lookup_long.nil? %>
-	   var patLat = <%= @lookup_lat %>;
-	   var patLng = <%= @lookup_long %>;
-         <% else %>
-           // this is timbuktu = lat 16.7770957947, long: -3.00905203819
-	   var patLat = 16.7770957947;
-	   var patLng = -3.00905203819;
-         <% end %>
+		<% if !@lookup_lat.nil? && !@lookup_long.nil? %>
+			var patLat = <%= @lookup_lat %>;
+			var patLng = <%= @lookup_long %>;
+		 <% else %>
+			// this is timbuktu = lat 16.7770957947, long: -3.00905203819
+			var patLat = 16.7770957947;
+			var patLng = -3.00905203819;
+		<% end %>
 
+		 var patsCurrentLocation = new google.maps.LatLng(patLat,patLng);
 
-         var patLocation = new google.maps.LatLng(patLat,patLng);
-         var twitterMarkerImage = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null,null,null,new google.maps.Size(35,35));
-		 var bicycleMarkerImage = new google.maps.MarkerImage('/images/bicycle_50.png', null,null,null,null);
+		 //var mapOptions = { center: patLocation, zoom: 7, mapTypeId: google.maps.MapTypeId.ROADMAP };
+		 var mapOptions = { center: patsCurrentLocation, zoom: 7, mapTypeId: "OSM",mapTypeControlOptions: {mapTypeIds: ["OSM"] } };
 
-	     //var myOptions = { center: patLocation, zoom: 7, mapTypeId: google.maps.MapTypeId.ROADMAP };
-	     var myOptions = { center: patLocation, zoom: 7, mapTypeId: "OSM",mapTypeControlOptions: {mapTypeIds: ["OSM"] } };
+		 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-         var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
+		//setup map type for OpenStreetMap...
 		 map.mapTypes.set("OSM", new google.maps.ImageMapType({
-		                getTileUrl: function(coord, zoom) {
-		                    return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-		                },
-		                tileSize: new google.maps.Size(256, 256),
-		                name: "OpenStreetMap",
-		                maxZoom: 18
-		            }));
+						getTileUrl: function(coord, zoom) {
+							return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+						},
+						tileSize: new google.maps.Size(256, 256),
+						name: "OpenStreetMap",
+						maxZoom: 18
+					}));
 
-         var marker = new google.maps.Marker({ position: patLocation, map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,icon: bicycleMarkerImage });
 
-         var how_far_circle = new google.maps.Circle({center: patLocation, map: map,radius: <%= @how_far_might_he_have_gone * 1609 %>, fillColor:"#c30083", fillOpacity: 0.2, strokeWeight: 2, strokeColor:"#c30083", strokeOpacity:0.9});
-         var pos_array = new Array();
-         var bounds = new google.maps.LatLngBounds();
+		 var currentLocation = new google.maps.Marker({ position: patsCurrentLocation, map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,icon: bicycleMarkerImage });
 
-         <% @past_locations.each {|location|  %>
-            bounds.extend(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
-            pos_array.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
-            var pathMarker = new google.maps.Marker({position:new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>), map: map,title: "<%= location[:text] %>",icon: twitterMarkerImage});
-         <% } %>
-         var where_he_has_been = new google.maps.Polyline({map: map, path: pos_array ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3, geodesic: true});
+		 var howFarCircle = new google.maps.Circle({center: patsCurrentLocation,
+													map: map,
+													radius: <%= @how_far_might_he_have_gone * 1609 %>,
+													fillColor:"#c30083",
+													fillOpacity: 0.2,
+													strokeWeight: 2,
+													strokeColor:"#c30083", 
+													strokeOpacity:0.9
+												});
+		
+		var previousLocations = new Array();
+		var bounds = new google.maps.LatLngBounds();
 
-         map.fitBounds(bounds);
-       }
-    </script>
-      
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-30558770-1']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>    
-  </head>
-  <body onload="initialize()">
-    <div class="container">
-      <h1>Where is Pat?</h1>
-      <div class="tweet">
-        <ul>
-          <li class="last-tweet">
-            <span class="title">Last tweet: </span>
-            <span class="value"><%= @last_tweet.text %></span>
-            <span class="detail">| <%= @last_tweet.created_at  %></span>
-          </li>
-          <% if !@last_location.nil? %>
-            <li class="last-location">
-              <span class="title">Last known location: </span>
-              <span class="value"><%= @last_location %></span>
-              <span class="detail">| <%= @lookup_lat || 0.0 %>, <%= @lookup_long || 0.0 %></span>
-              <span class="detail">| <%= @time_at_location  %></span></li>
-            </li> 
-            <% if @hours_since_last_tweet > 0 %>
-              <li class="how-far">
-                <span class="title">Freshness: </span>
-                <span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
-              </li>
-            <% end %>
-          <% else %>
-            <li class="lost">
-              <span class="title">Last known location: </span>
-              <span class="value">No idea - he could be in Timbuktu for all I know!</span>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-      <div id="map_canvas" style="width:100%; height:500px"/>
-    </div>
-    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
-  </body>
+		<% @past_locations.each {|location|  %>
+			//expand the bounds to fit each previous location...
+			bounds.extend(new google.maps.LatLng(<%= location[:lat] %>,<%= location[:long] %>));
+			
+			//Build the array of past locations...
+			previousLocations.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
+			
+			//Create markers for each previous location...
+			var pathMarker = new google.maps.Marker({position:new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>), map: map,title: "<%= location[:text] %>",icon: twitterMarkerImage});
+		<% } %>
+		
+		var patsPath = new google.maps.Polyline({map: map, path: previousLocations ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3, geodesic: true});
+
+		//Zoom the map to fit all the previous locations...
+		map.fitBounds(bounds);
+		}
+		</script>
+		<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-30558770-1']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		</script>
+	</head>
+	<body onload="initialize()">
+		<div class="container">
+			<h1>
+				Where is Pat?
+			</h1>
+			<div class="tweet" style="margin-bottom:30px;">
+				<ul>
+					<li class="last-tweet">
+						<span class="title">Last tweet:</span> <span class="value"><%= @last_tweet.text %></span> <span class="detail">| <%= @last_tweet.created_at  %></span>
+					</li>
+					<% if !@last_location.nil? %>
+					<li class="last-location">
+						<span class="title">Last known location:</span>
+						<span class="value"><%= @last_location %></span>
+						<span class="detail">| <%= @lookup_lat || 0.0 %>, <%= @lookup_long || 0.0 %></span>
+						<span class="detail">| <%= @time_at_location  %></span>
+					</li>
+					
+						<% if @hours_since_last_tweet > 0 %>
+						<li class="how-far">
+							<span class="title">Freshness:</span>
+							<span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
+						</li>
+						<% end %>
+					
+					<% else %>
+					<li class="lost">
+						<span class="title">Last known location:</span>
+						<span class="value">No idea - he could be in Timbuktu for all I know!</span>
+					</li>
+					<% end %>
+				</ul>
+			</div>
+			<div id="map_canvas" style="width:100%; height:500px;"></div>
+			<h2>Speed (kph) over Time (h)</h2>
+			<div id="graph" style="width:100%; height:400px;margin-top:30px;"></div>
+		</div><!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript">
+</script><script type="text/javascript">
+window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')
+		</script>
+	</body>
 </html>
