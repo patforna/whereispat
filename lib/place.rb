@@ -3,8 +3,14 @@ class Place
   
   attr_reader :latitude, :longitude
   
-  def self.parse(message)
-    message =~ LAT_LONG_PATTERN ? Place.new($3, $4) : TIMBUKTU
+  def self.parse(tweet)
+    if tweet.geo
+      Place.new(tweet.geo.latitude, tweet.geo.longitude)
+    elsif tweet.text =~ LAT_LONG_PATTERN
+      Place.new($3, $4)
+    else
+      TIMBUKTU
+    end    
   end    
 
   private

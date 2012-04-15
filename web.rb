@@ -25,22 +25,11 @@ get '/' do
   @past_locations = Array.new()
   
   tweets.each {|tweet|
-    lat = nil
-    long = nil
-    
-    # if tweet has data and we've not yet got a tweet with a location then grab it as the lastest locatable tweet
-    if !tweet.geo.nil?
-      lat = tweet.geo.latitude
-      long = tweet.geo.longitude
-    elsif Place.parse(tweet.text) != Place::TIMBUKTU
-      place = Place.parse(tweet.text)
-      lat = place.latitude
-      long = place.longitude
-    end
+    place = Place.parse(tweet)
    
     # if the tweet has geo data and is after the start date... let's track it! 
-    if  !lat.nil? && !long.nil? && (tweet.created_at <=> start_date) == 1
-      @past_locations.push({:lat => lat, :long => long, :time => tweet.created_at, :text => tweet.text })
+    if  place != Place::TIMBUKTU && (tweet.created_at <=> start_date) == 1
+      @past_locations.push({:lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
     end
   }
   
