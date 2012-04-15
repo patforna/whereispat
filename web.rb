@@ -23,8 +23,6 @@ get '/' do
   tweets = Twitter.user_timeline("patforna")
   @last_tweet = tweets.select { |x| !x.text.include? '#whereispat' }.first
   @past_locations = Array.new()
-
-  @last_tweet_with_a_location = nil
   
   tweets.each {|tweet|
     lat = nil
