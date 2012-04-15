@@ -1,13 +1,13 @@
 require 'sinatra'
 require 'twitter'
 require 'geokit'
+require './lib/place'
 
 Geokit::default_units = :kms
 Geokit::default_formula = :sphere
 
 average_cycling_speed_mph = 5
 start_date = Time.new(2012,4,3)
-regex_pattern = /.* (\d{1,2}\.\d{6}),(\d{1,2}\.\d{6}) .*/
 
 configure :production do
   Twitter.configure do |config|                        
@@ -34,12 +34,10 @@ get '/' do
     if !tweet.geo.nil?
       lat = tweet.geo.latitude
       long = tweet.geo.longitude
-    elsif tweet.text =~ regex_pattern 
-      # his tweet contains lat and long...
-      @last_tweet_with_a_text_location = tweet
-      m = regex_pattern.match(@last_tweet_with_a_text_location.text)
-      lat = m[1].to_f
-      long = m[2].to_f
+    elsif Place.parse(tweet.text) != Place::TIMBUKTU
+      place = Place.parse(tweet.text)
+      lat = place.latitude
+      long = place.longitude
     end
    
     # if the tweet has geo data and is after the start date... let's track it! 
