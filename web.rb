@@ -9,16 +9,17 @@ average_cycling_speed_mph = 5
 start_date = Time.new(2012,4,3)
 regex_pattern = /.* (\d{1,2}\.\d{6}),(\d{1,2}\.\d{6}) .*/
 
-Twitter.configure do |config|                        
-  config.endpoint = 'http://' + ENV['APIGEE_TWITTER_API_ENDPOINT']     
-  config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
-  config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-  config.oauth_token = ENV['TWITTER_OAUTH_TOKEN']
-  config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
+configure :production do
+  Twitter.configure do |config|                        
+    config.endpoint = 'http://' + ENV['APIGEE_TWITTER_API_ENDPOINT']     
+    config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+    config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+    config.oauth_token = ENV['TWITTER_OAUTH_TOKEN']
+    config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
+  end
 end
 
 get '/' do
-
   tweets = Twitter.user_timeline("patforna")
   @last_tweet = tweets.first
   @past_locations = Array.new()
