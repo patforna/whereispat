@@ -29,7 +29,7 @@ get '/' do
    
     # if the tweet has geo data and is after the start date... let's track it! 
     if  place != Place::TIMBUKTU && (tweet.created_at <=> start_date) == 1
-      @past_locations.push({:lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
+      @past_locations.push({:place => place, :lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
     end
   }
   
@@ -50,8 +50,6 @@ get '/' do
     
     speed = (distance / time_between_locations.to_f).round(2)
     
-    
-    
     previous_location = location
     @total_distance = culmulative_distance
     @total_time = culmulative_time
@@ -61,17 +59,8 @@ get '/' do
   @hours_since_last_tweet = ((Time.new() - @last_tweet.created_at) / 3600).round
   @how_far_might_he_have_gone = @hours_since_last_tweet * average_cycling_speed_mph
 
-  @lookup_lat = @past_locations.last[:lat]
-  @lookup_long = @past_locations.last[:long]
-  @time_at_location = @past_locations.last[:time]
-
-  begin
-    @last_location = Twitter.reverse_geocode(:lat => @lookup_lat, :long => @lookup_long, :max_results => 1, :granularity => "city").first.full_name
-  rescue
-    @last_location = "Not sure the name of the place"
-  end
-
- 
+  @last_place = @past_locations.last[:place]
+  @time_at_location = @past_locations.last[:time] 
 
   erb :index
 end

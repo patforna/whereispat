@@ -130,14 +130,8 @@
 		var twitterMarkerImage = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null,null,null,new google.maps.Size(35,35));
 		var bicycleMarkerImage = new google.maps.MarkerImage('/images/bicycle_50.png', null,null,null,null);
 
-		<% if !@lookup_lat.nil? && !@lookup_long.nil? %>
-			var patLat = <%= @lookup_lat %>;
-			var patLng = <%= @lookup_long %>;
-		 <% else %>
-			// this is timbuktu = lat 16.7770957947, long: -3.00905203819
-			var patLat = 16.7770957947;
-			var patLng = -3.00905203819;
-		<% end %>
+		var patLat = <%= @last_place.latitude %>;
+		var patLng = <%= @last_place.longitude %>;
 
 		 var patsCurrentLocation = new google.maps.LatLng(patLat,patLng);
 
@@ -210,25 +204,16 @@
 					<li class="last-tweet">
 						<span class="title">Last tweet:</span> <span class="value"><%= @last_tweet.text %></span> <span class="detail">| <%= @last_tweet.created_at  %></span>
 					</li>
-					<% if !@last_location.nil? %>
 					<li class="last-location">
 						<span class="title">Last known location:</span>
-						<span class="value"><%= @last_location %></span>
-						<span class="detail">| <%= @lookup_lat || 0.0 %>, <%= @lookup_long || 0.0 %></span>
+						<span class="value"><%= @last_place.name %></span>
+						<span class="detail">| <%= @last_place.latitude %>, <%= @last_place.longitude %></span>
 						<span class="detail">| <%= @time_at_location  %></span>
-					</li>
-					
-						<% if @hours_since_last_tweet > 0 %>
-						<li class="how-far">
-							<span class="title">Freshness:</span>
-							<span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
-						</li>
-						<% end %>
-					
-					<% else %>
-					<li class="lost">
-						<span class="title">Last known location:</span>
-						<span class="value">No idea - he could be in Timbuktu for all I know!</span>
+					</li>					
+					<% if @hours_since_last_tweet > 0 %>
+					<li class="how-far">
+						<span class="title">Freshness:</span>
+						<span class="value">It's been <%= @hours_since_last_tweet %> hours since his last locatable tweet - he could be <%= @how_far_might_he_have_gone %> miles away by now</span>
 					</li>
 					<% end %>
 				</ul>

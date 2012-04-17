@@ -12,11 +12,18 @@ class Place
       TIMBUKTU
     end    
   end    
-
-  private
+  
   def initialize(latitude, longitude)
     @latitude = latitude.to_f
     @longitude = longitude.to_f
+  end
+  
+  def name
+    begin
+      Twitter.reverse_geocode(:lat => @latitude, :long => @longitude, :max_results => 1, :granularity => "city").first.full_name
+    rescue
+      "Not sure the name of the place"
+    end
   end
   
   TIMBUKTU = Place.new(16.7770957947, -3.00905203819)

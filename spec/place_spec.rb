@@ -5,8 +5,8 @@ describe Place do
   
   describe "parse tweet with geo data" do
     it "should regognise latitude and longitude" do
-      tweet = Twitter::Status.new('geo' => {'type' => 'Point', "coordinates" => [13.2, 7.6]})
-      should_parse tweet, 13.2, 7.6
+      tweet = Twitter::Status.new('geo' => {'type' => 'Point', "coordinates" => [13.2, -7.6]})
+      should_parse tweet, 13.2, -7.6
     end
   end
                                                 
@@ -34,6 +34,20 @@ describe Place do
       should_parse tweet("no geo data in here"), TIMBUKTU_LATITUDE, TIMBUKTU_LONGITUDE      
     end  
   end
+  
+  describe "compute name of place" do
+    it "should use Twitter API to reverse geocode latitude and longitude" do
+      latitude, longitude, name = 40, 10, 'foo'
+      twitter_results = [Twitter::Place.new('full_name' => name)]
+      Twitter.should_receive(:reverse_geocode).with(hash_including(:lat => latitude, :long => longitude)).and_return(twitter_results)
+      Place.new(latitude, longitude).name.should == name
+    end
+    
+    it "should fall back to sensible message when things go haywire" do
+      Twitter.should_receive(:reverse_geocode).and_raise(:boom)
+      Place.new(0, 0).name.should == "Not sure the name of the place"
+    end    
+  end
 
   private
   def tweet(message) 
@@ -47,8 +61,3 @@ describe Place do
   end
 
 end
-
-
-# sign of live
-#  tweet
-#  place
