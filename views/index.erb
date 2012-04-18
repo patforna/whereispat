@@ -174,7 +174,7 @@
 			previousLocations.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
 			
 			//Create markers for each previous location...
-			var pathMarker = new google.maps.Marker({position:new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>), map: map,title: "<%= location[:text] %>",icon: twitterMarkerImage});
+			var pathMarker = new google.maps.Marker({position:new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>), map: map, icon: twitterMarkerImage});
 		<% } %>
 		
 		var patsPath = new google.maps.Polyline({map: map, path: previousLocations ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3, geodesic: true});
