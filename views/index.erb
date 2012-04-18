@@ -135,21 +135,9 @@
 
 		 var patsCurrentLocation = new google.maps.LatLng(patLat,patLng);
 
-		 //var mapOptions = { center: patLocation, zoom: 7, mapTypeId: google.maps.MapTypeId.ROADMAP };
-		 var mapOptions = { center: patsCurrentLocation, zoom: 7, mapTypeId: "OSM",mapTypeControlOptions: {mapTypeIds: ["OSM"] } };
-
+		 var mapOptions = { center: patsCurrentLocation, zoom: 7, mapTypeId: google.maps.MapTypeId.TERRAIN };
+		 
 		 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-		//setup map type for OpenStreetMap...
-		 map.mapTypes.set("OSM", new google.maps.ImageMapType({
-						getTileUrl: function(coord, zoom) {
-							return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-						},
-						tileSize: new google.maps.Size(256, 256),
-						name: "OpenStreetMap",
-						maxZoom: 18
-					}));
-
 
 		 var currentLocation = new google.maps.Marker({ position: patsCurrentLocation, map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,icon: bicycleMarkerImage });
 
