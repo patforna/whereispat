@@ -7,7 +7,7 @@ Geokit::default_units = :kms
 Geokit::default_formula = :sphere
 
 average_cycling_speed_mph = 5
-start_date = Time.new(2012,4,3)
+start_date = Time.new(2012,4,10)
 
 configure :production do
   Twitter.configure do |config|                        
