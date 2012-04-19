@@ -103,51 +103,6 @@
 			vis.render();
 		
 		</script>
-		<script type="text/javascript">
-		function initialize_map() {
-		
-		//A couple of custom images for the map markers	
-		var twitterMarkerImage = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null,null,null,new google.maps.Size(35,35));
-		var bicycleMarkerImage = new google.maps.MarkerImage('/images/bicycle_50.png', null,null,null,null);
-
-		 var patsCurrentLocation = new google.maps.LatLng($('.latitude').text(), $('.longitude').text());
-
-		 var mapOptions = { center: patsCurrentLocation, zoom: 7, mapTypeId: google.maps.MapTypeId.TERRAIN };
-		 
-		 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-		 var currentLocation = new google.maps.Marker({ position: patsCurrentLocation, map: map, title:"Pat woz ere!",animation: google.maps.Animation.BOUNCE,icon: bicycleMarkerImage });
-
-		 var howFarCircle = new google.maps.Circle({center: patsCurrentLocation,
-													map: map,
-													radius: $('.how-far').text() * 1609,
-													fillColor:"#c30083",
-													fillOpacity: 0.2,
-													strokeWeight: 2,
-													strokeColor:"#c30083", 
-													strokeOpacity:0.9
-												});
-		
-		var previousLocations = new Array();
-		var bounds = new google.maps.LatLngBounds();
-
-		<% @past_locations.each {|location|  %>
-			//expand the bounds to fit each previous location...
-			bounds.extend(new google.maps.LatLng(<%= location[:lat] %>,<%= location[:long] %>));
-			
-			//Build the array of past locations...
-			previousLocations.push(new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>));
-			
-			//Create markers for each previous location...
-			var pathMarker = new google.maps.Marker({position:new google.maps.LatLng(<%= location[:lat]%>,<%= location[:long] %>), map: map, icon: twitterMarkerImage});
-		<% } %>
-		
-		var patsPath = new google.maps.Polyline({map: map, path: previousLocations ,strokeColor: "#257890", strokeOpacity: 0.8,strokeWeight: 3, geodesic: true});
-
-		//Zoom the map to fit all the previous locations...
-		map.fitBounds(bounds);
-		}
-		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -181,8 +136,12 @@
 window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')
 		</script>
 		<script src="js/main.js" type="text/javascript"></script>
+		<script src="js/map.js" type="text/javascript"></script>		
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_OeH5YFbLpgAObdY_FEVxPxHUuN5b6Jk&sensor=false">
-		</script>		
-	    <script defer src="js/analytics.js"></script>
+		</script>
+		<script type="text/javascript">
+		  var route = <%= @route.to_json %>
+		</script>
+	    <script defer src="js/analytics.js"></script>	    
 	</body>
 </html>

@@ -1,6 +1,7 @@
 # unit tests
 require 'place'
 require 'route'
+require 'json_spec'
 
 # functional tests
 ENV['RACK_ENV'] = 'test'

@@ -1,3 +1,5 @@
+require 'json'
+
 class Place
   LAT_LONG_PATTERN = /(^|(.* ))(-?\d+\.\d+),(-?\d+\.\d+)( .*|$)/
   
@@ -24,6 +26,10 @@ class Place
     
   def name
     @name = compute_name if @name.nil?
+  end
+  
+  def to_json(*a)
+    {:latitude => @latitude, :longitude => @longitude, :visited_at => @visited_at}.to_json(*a)
   end
   
   def ==(other)

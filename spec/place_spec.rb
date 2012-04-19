@@ -71,6 +71,13 @@ describe Place do
     end    
   end
   
+  describe "json serialisation" do
+    it "should serialise fields to JSON" do
+      now_ish = Time.now
+      Place.new(1.1, 2.2,now_ish).to_json.should be_json_eql(%({"latitude":1.1,"longitude":2.2, "visited_at":"#{now_ish}"}))
+    end
+  end
+  
   def should_parse(tweet, latitude, longitude)
     place = Place.parse tweet
     place.latitude.should == latitude
