@@ -9,7 +9,7 @@
 	<body>
 		<div class="container">
 			<h1>Where is Pat?</h1>
-			<div class="tweet" style="margin-bottom:30px;">
+			<div class="tweet">
 				<ul>
 					<li class="last-tweet">
 						<span class="title">Last tweet:</span> <span class="value"><%= @last_tweet.text %></span> <span class="detail">| <%= @last_tweet.created_at %></span>
@@ -28,9 +28,9 @@
 					<% end %>
 				</ul>
 			</div>
-			<div id="map_canvas" style="width:100%; height:500px;"></div>
+			<div id="map_canvas"></div>
 			<h2>Speed (kph) over Time (h)</h2>
-			<div id="graph" style="width:100%; height:400px;margin-top:30px;"></div>
+			<div id="graph"></div>
 		</div>
 		<%= erb :javascript %>
 		<%= erb :protovis %>		
