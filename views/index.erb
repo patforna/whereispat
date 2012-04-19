@@ -151,19 +151,17 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1>
-				Where is Pat?
-			</h1>
+			<h1>Where is Pat?</h1>
 			<div class="tweet" style="margin-bottom:30px;">
 				<ul>
 					<li class="last-tweet">
-						<span class="title">Last tweet:</span> <span class="value"><%= @last_tweet.text %></span> <span class="detail">| <%= @last_tweet.created_at  %></span>
+						<span class="title">Last tweet:</span> <span class="value"><%= @last_tweet.text %></span> <span class="detail">| <%= @last_tweet.created_at %></span>
 					</li>
 					<li class="last-location">
 						<span class="title">Last known location:</span>
 						<span class="value"><%= @last_place.name %></span>
 						<span class="detail">| <span class="latitude"><%= @last_place.latitude %></span>, <span class="longitude"><%= @last_place.longitude %></span></span>
-						<span class="detail">| <%= @time_at_location  %></span>
+						<span class="detail">| <%= @last_place.visited_at %></span>
 					</li>					
 					<% if @hours_since_last_tweet > 0 %>
 					<li class="freshness">

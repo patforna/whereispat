@@ -3,14 +3,20 @@ require 'twitter'
 
 describe Place do
   
-  describe "parse tweet with geo data" do
+  describe "parse tweet" do
     it "should regognise latitude and longitude" do
       tweet = Twitter::Status.new('geo' => {'type' => 'Point', "coordinates" => [13.2, -7.6]})
       should_parse tweet, 13.2, -7.6
     end
+    
+    it "should regognise time when tweet was created" do
+      time = Time.new(2012,4,10)
+      tweet = Twitter::Status.new('created_at' => time.to_s)
+      Place.parse(tweet).visited_at.should == time
+    end
   end
                                                 
-  describe "parse tweet without geo data" do
+  describe "parse tweet with no implicit geo data" do
     it "should recognise latitude and longitude" do 
       should_parse tweet("42.0123,8.9876"), 42.0123, 8.9876
       should_parse tweet("13.01,10.2"), 13.01, 10.2      
@@ -28,11 +34,9 @@ describe Place do
       should_parse tweet("  foo 42.0,7.0"), 42.0, 7.0     
     end
     
-    it "should fall back to Timbuktu if message can't be parsed" do
-      TIMBUKTU_LATITUDE = 16.7770957947
-      TIMBUKTU_LONGITUDE = -3.00905203819
-      should_parse tweet("no geo data in here"), TIMBUKTU_LATITUDE, TIMBUKTU_LONGITUDE      
-    end  
+    it "should indicate place is unknown if no geo data" do
+      Place.parse(tweet("no geo data in here")).unknown?.should be_true
+    end    
   end
   
   describe "compute name of place" do
@@ -41,6 +45,13 @@ describe Place do
       twitter_results = [Twitter::Place.new('full_name' => name)]
       Twitter.should_receive(:reverse_geocode).with(hash_including(:lat => latitude, :long => longitude)).and_return(twitter_results)
       Place.new(latitude, longitude).name.should == name
+    end
+    
+    it "should use cache response from Twitter" do
+      Twitter.should_receive(:reverse_geocode)
+      place = Place.new
+      place.name
+      place.name
     end
     
     it "should fall back to sensible message when things go haywire" do

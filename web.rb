@@ -22,13 +22,17 @@ end
 get '/' do
   tweets = Twitter.user_timeline("patforna")
   @last_tweet = tweets.select { |x| !x.text.include? '#whereispat' }.first
+  
+  
+  
+  
   @past_locations = Array.new()
   
   tweets.each {|tweet|
     place = Place.parse(tweet)
    
     # if the tweet has geo data and is after the start date... let's track it! 
-    if  place != Place::TIMBUKTU && (tweet.created_at <=> start_date) == 1
+    if !place.unknown? && (tweet.created_at <=> start_date) == 1
       @past_locations.push({:place => place, :lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
     end
   }
@@ -60,7 +64,6 @@ get '/' do
   @how_far_might_he_have_gone = @hours_since_last_tweet * average_cycling_speed_mph
 
   @last_place = @past_locations.last[:place]
-  @time_at_location = @past_locations.last[:time] 
 
   erb :index
 end
