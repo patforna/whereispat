@@ -59,6 +59,18 @@ describe Place do
       Place.new(0, 0).name.should == "Not sure the name of the place"
     end    
   end
+  
+  describe "when two places should be equal" do
+    it "should be equal if same latitude and longitude" do
+      Place.new(0, 0).should == Place.new(0, 0)
+      Place.new(10, -10).should == Place.new(10, -10)
+    end
+    
+    it "should not be equal if different latitude or longitude" do
+      Place.new(2, 1).should_not == Place.new(1, 2)
+      Place.new(1, 1).should_not == Place.new(1, -1)  
+    end    
+  end
 
   private
   def tweet(message) 

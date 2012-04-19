@@ -26,6 +26,10 @@ class Place
     @name = compute_name if @name.nil?
   end
   
+  def ==(other)
+    @latitude == other.latitude && @longitude == other.longitude
+  end
+  
   private
   def compute_name
     begin
