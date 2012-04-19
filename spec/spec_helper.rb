@@ -1,5 +1,6 @@
 # unit tests
 require 'place'
+require 'route'
 
 # functional tests
 ENV['RACK_ENV'] = 'test'
@@ -10,4 +11,10 @@ require 'webmock/rspec'
 RSpec.configure do |conf|
   conf.include Rack::Test::Methods
   conf.include WebMock::API
+end
+
+# helper methods
+require 'twitter'
+def tweet(message) 
+  Twitter::Status.new("text" => message)
 end

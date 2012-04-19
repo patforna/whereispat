@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'twitter'
 
 describe Place do
   
@@ -70,11 +69,6 @@ describe Place do
       Place.new(2, 1).should_not == Place.new(1, 2)
       Place.new(1, 1).should_not == Place.new(1, -1)  
     end    
-  end
-
-  private
-  def tweet(message) 
-    Twitter::Status.new("text" => message)
   end
   
   def should_parse(tweet, latitude, longitude)

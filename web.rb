@@ -2,6 +2,7 @@ require 'sinatra'
 require 'twitter'
 require 'geokit'
 require './lib/place'
+require './lib/route'
 
 Geokit::default_units = :kms
 Geokit::default_formula = :sphere
@@ -22,7 +23,8 @@ end
 get '/' do
   tweets = Twitter.user_timeline("patforna")
   @last_tweet = tweets.select { |x| !x.text.include? '#whereispat' }.first
-  
+  @route = Route.from(tweets)
+  @last_place = @route.last_place
   
   
   
@@ -33,7 +35,7 @@ get '/' do
    
     # if the tweet has geo data and is after the start date... let's track it! 
     if !place.unknown? && (tweet.created_at <=> start_date) == 1
-      @past_locations.push({:place => place, :lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
+      @past_locations.push({:lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
     end
   }
   
@@ -62,8 +64,6 @@ get '/' do
 
   @hours_since_last_tweet = ((Time.new() - @last_tweet.created_at) / 3600).round
   @how_far_might_he_have_gone = @hours_since_last_tweet * average_cycling_speed_mph
-
-  @last_place = @past_locations.last[:place]
 
   erb :index
 end
