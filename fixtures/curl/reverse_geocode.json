@@ -1,0 +1,26 @@
+HTTP/1.1 200 OK
+Date: Sat, 14 Apr 2012 16:46:08 GMT
+Status: 200 OK
+Cache-Control: no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+Expires: Tue, 31 Mar 1981 05:00:00 GMT
+Content-Length: 1048
+X-RateLimit-Limit: 150
+ETag: "03d76bce7d83ef40a6c9ce0c9c8a1752"
+X-Transaction: 64018071133104e8
+Pragma: no-cache
+X-Frame-Options: SAMEORIGIN
+X-Transaction-Mask: a6183ffa5f8ca943ff1b53b5644ef1149ab03984
+X-MID: bce84b73d39e90f0f26d1961b058af35de6594b8
+X-RateLimit-Class: api
+X-RateLimit-Remaining: 142
+Last-Modified: Sat, 14 Apr 2012 16:46:08 GMT
+X-RateLimit-Reset: 1334425351
+X-Runtime: 0.04713
+Content-Type: application/json; charset=utf-8
+Set-Cookie: k=10.34.253.111.1334421968805354; path=/; expires=Sat, 21-Apr-12 16:46:08 GMT; domain=.twitter.com
+Set-Cookie: guest_id=v1%3A133442196880871606; domain=.twitter.com; path=/; expires=Tue, 15-Apr-2014 04:46:08 GMT
+Set-Cookie: _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCKpXv7E2ASIKZmxhc2hJQzonQWN0aW9uQ29u%250AdHJvbGxlcjo6Rmxhc2g6OkZsYXNoSGFzaHsABjoKQHVzZWR7ADoHaWQiJTUx%250ANWJiMzA0ZThkN2YyNjA2NGE0YThlZGY1MWNkZGM5--fce917950f2139fe513e5a71acf7d94859bd2295; domain=.twitter.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Server: tfe
+
+{"query":{"type":"reverse_geocode","params":{"granularity":"city","coordinates":{"type":"Point","coordinates":[9.81585844,44.10506146]},"accuracy":0},"url":"http:\/\/api.twitter.com\/1\/geo\/reverse_geocode.json?long=9.81585844&granularity=city&lat=44.10506146&accuracy=0"},"result":{"places":[{"bounding_box":{"type":"Polygon","coordinates":[[[9.7637701,44.0637768],[9.8921196,44.0637768],[9.8921196,44.1515188],[9.7637701,44.1515188]]]},"country":"Italia","contained_within":[{"country":"Italia","bounding_box":{"type":"Polygon","coordinates":[[[9.465962,44.0232273],[10.071559,44.0232273],[10.071559,44.4415488],[9.465962,44.4415488]]]},"name":"La Spezia","attributes":{},"full_name":"La Spezia, Liguria","country_code":"IT","url":"http:\/\/api.twitter.com\/1\/geo\/id\/6fb4a0c14649cb2f.json","place_type":"admin","id":"6fb4a0c14649cb2f"}],"name":"La Spezia","full_name":"La Spezia, La Spezia","attributes":{},"country_code":"IT","url":"http:\/\/api.twitter.com\/1\/geo\/id\/b18db35934b21e08.json","place_type":"city","id":"b18db35934b21e08"}]}}

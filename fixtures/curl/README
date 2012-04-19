@@ -1,0 +1,5 @@
+Here are the HTTP calls I used to retrieve the JSON files in this directory:
+
+curl -is 'http://api.twitter.com/1/geo/reverse_geocode.json?granularity=city&lat=44.10506146&long=9.81585844&max_results=1' > reverse_geocode.json 
+curl -is 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=patforna' > user_timeline.json 
+
