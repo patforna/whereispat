@@ -8,7 +8,7 @@ Geokit::default_units = :kms
 Geokit::default_formula = :sphere
 
 average_cycling_speed_mph = 5
-start_date = Time.new(2012,4,10)
+START_DATE = Time.new(2012,4,10)
 
 configure :production do
   Twitter.configure do |config|                        
@@ -21,24 +21,20 @@ configure :production do
 end
 
 get '/' do
-  tweets = Twitter.user_timeline("patforna")
-  @last_tweet = tweets.select { |x| !x.text.include? '#whereispat' }.first
+  tweets = Twitter.user_timeline("patforna").select { |t| t.created_at > START_DATE }
+  @last_tweet = tweets.select { |t| !t.text.include? '#whereispat'}.first
   @route = Route.from(tweets)
   @last_place = @route.last_place
   
   
   
   @past_locations = Array.new()
-  
   tweets.each {|tweet|
-    place = Place.parse(tweet)
-   
-    # if the tweet has geo data and is after the start date... let's track it! 
-    if !place.unknown? && (tweet.created_at <=> start_date) == 1
+    place = Place.parse(tweet)   
+    if !place.unknown?
       @past_locations.push({:lat => place.latitude, :long => place.longitude, :time => tweet.created_at, :text => tweet.text })
     end
   }
-  
   @past_locations.reverse!
   
   previous_location = @past_locations[0];
