@@ -21,7 +21,7 @@ configure :production do
 end
 
 get '/' do
-  tweets = Twitter.user_timeline("patforna").select { |t| t.created_at > START_DATE }
+  tweets = Twitter.user_timeline("patforna", :count => 50).select { |t| t.created_at > START_DATE }
   @last_tweet = tweets.select { |t| !t.text.include? '#whereispat'}.first
   @route = Route.from(tweets)
   @last_place = @route.last_place
