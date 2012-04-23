@@ -41,7 +41,7 @@ function initialize_map() {
         bounds.extend(new google.maps.LatLng(this.latitude, this.longitude));
 
         //build the probable route
-        if (Date.parse(this.visited_at) > Date.parse("2012-04-20 18:46:41 +0200")) {
+        if (Date.parse(this.visited_at) > Date.parse("2012-04-23 18:46:41 +0200")) {
           probable_route.push(new google.maps.LatLng(this.latitude, this.longitude));
         }
 
