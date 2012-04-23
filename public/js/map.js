@@ -33,16 +33,17 @@ function initialize_map() {
         strokeOpacity: 0.9
     });
 
-    var previousLocations = new Array();
+    var probable_route = [];
     var bounds = new google.maps.LatLngBounds();
 
-    $.each(route.places,
-    function() {
+    $.each(route.places, function() {
         //expand the bounds to fit each previous location...
         bounds.extend(new google.maps.LatLng(this.latitude, this.longitude));
 
-        //Build the array of past locations...
-        previousLocations.push(new google.maps.LatLng(this.latitude, this.longitude));
+        //build the probable route
+        if (Date.parse(this.visited_at) > Date.parse("2012-04-20 18:46:41 +0200")) {
+          probable_route.push(new google.maps.LatLng(this.latitude, this.longitude));
+        }
 
         //Create markers for each previous location...
         var pathMarker = new google.maps.Marker({
@@ -54,13 +55,65 @@ function initialize_map() {
 
     var patsPath = new google.maps.Polyline({
         map: map,
-        path: previousLocations,
+        path: probable_route,
         strokeColor: "#257890",
         strokeOpacity: 0.8,
         strokeWeight: 3,
         geodesic: true
     });
+	
+	var directionsService = new google.maps.DirectionsService();
+
+	var confirmed_route = [
+		{ origin: 'Chiasso, Switzerland', waypoints: ['Lainate Milan, Italy','Rho Milan, Italy','Cusago Milan, Italy'], destination: 'Rosate Milan, Italy' },
+		 { origin: 'Rosate Milan, Italy', waypoints: ['Motta Visconti Milan','Pavia','Casteggio','Montalto Pavese Pavia','Lirio Pavia','Rocca de\' Giorgi Pavia'], destination: 'Nibbiano Piacenza, Italy' },
+		{ origin: 'Nibbiano Piacenza, Italy', waypoints: ['Pecorara','Bobbio'], destination: '29024 Ferriere Piacenza, Italy' },
+		{ origin: '29024 Ferriere Piacenza, Italy', waypoints: ['Selva, Ferriere Piacenza, Italy','43041 Bedonia Parma','54027 Pontremoli Massa-Carrara'], destination: 'La Spezia' },
+		{ origin: 'La Spezia', waypoints: ['Pugliola','Sarzana','Viareggio'], destination: 'Lucca' },
+		{ origin: 'Lucca', waypoints: ['Altopascio','Castelfiorentino','Poggibonsi','Monteriggioni'], destination: 'Siena' },
+		{ origin: 'Siena', waypoints: ['Buonoconvento','Pienza'], destination: 'Montepulciano' },
+		{ origin: 'Montepulciano', waypoints: ['Castelione del Lago'], destination: 'Perugia' },
+		{ origin: 'Perugia', waypoints: ['Assisi','Spoleto'], destination: 'Terni' },
+		{ origin: 'Terni', waypoints: ['Rieti','Borgorese'], destination: 'Avezzano' },
+		{ origin: 'Avezzano', waypoints: ['Pescasseroli'], destination: 'Opi' },
+		{ origin: 'Opi', waypoints: ['Alfedena','Isernia','Bojano'], destination: 'Vinchiaturo' }
+	];
+
+    $.each(confirmed_route, function() {
+		var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: true, suppressMarkers: true });	
+		directionsService.route(directionsRequestFor(this),
+		function(response, status) {
+		    if (status == google.maps.DirectionsStatus.OK) {
+		        directionsRenderer.setDirections(response);
+		    } else {
+			  console.log("Request to direction service failed. Status: " + status);
+			}
+		});
+		
+    });
 
     //Zoom the map to fit all the previous locations...
     map.fitBounds(bounds);
 }
+
+function directionsRequestFor(data) {
+	return {
+	    origin: data.origin,
+	    destination: data.destination,
+	    waypoints: $.map(data.waypoints, function(w, i) { return { location: w, stopover: false} }),
+	    avoidHighways: true,
+	    avoidTolls: true,
+	    provideRouteAlternatives: false,
+	    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+	    unitSystem: google.maps.UnitSystem.METRIC
+	};
+}
+
+
+/* pat: could use this to geocode the route once and then cache/serve the coordinates from backend
+$.each(response.routes[0].legs, function(i, leg) {
+  $.each(leg.steps, function(j, step) {
+	geo_data = geo_data.concat(step.path);
+  });
+}); */				
+
