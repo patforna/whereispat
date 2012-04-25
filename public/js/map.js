@@ -27,10 +27,10 @@ function initialize_map() {
         map: map,
         radius: $('.how-far').text() * 1609,
         fillColor: "#c30083",
-        fillOpacity: 0.2,
+        fillOpacity: 0.1,
         strokeWeight: 2,
         strokeColor: "#c30083",
-        strokeOpacity: 0.9
+        strokeOpacity: 0.5
     });
 
     var probable_route = [];
@@ -41,7 +41,8 @@ function initialize_map() {
         bounds.extend(new google.maps.LatLng(this.latitude, this.longitude));        
      
         //build the probable route
-        if (Date.parse(this.visited_at) > Date.parse("2012-04-22 16:33:00 +0200")) {
+        if (Date.parse(this.visited_at) > Date.parse("2012-04-23 18:46:41 +0200")) {
+	      console.log("This tweet happened after the manual route mapping: " + this.visited_at);
           probable_route.push(new google.maps.LatLng(this.latitude, this.longitude));
         }
 
@@ -67,7 +68,7 @@ function initialize_map() {
 	var confirmed_route = [
 		{ origin: 'Chiasso, Switzerland', waypoints: ['Lainate Milan, Italy','Rho Milan, Italy','Cusago Milan, Italy'], destination: 'Rosate Milan, Italy' },
 		 { origin: 'Rosate Milan, Italy', waypoints: ['Motta Visconti Milan','Pavia','Casteggio','Montalto Pavese Pavia','Lirio Pavia','Rocca de\' Giorgi Pavia'], destination: 'Nibbiano Piacenza, Italy' },
-		{ origin: 'Nibbiano Piacenza, Italy', waypoints: ['Pecorara','Bobbio'], destination: '29024 Ferriere Piacenza, Italy' },
+		{ origin: 'Nibbiano Piacenza, Italy', waypoints: ['Pecorara','Bobbio'], destination: '29024 Ferriere Piacenza, Italy' }, // marzonago
 		{ origin: '29024 Ferriere Piacenza, Italy', waypoints: ['Selva, Ferriere Piacenza, Italy','43041 Bedonia Parma','54027 Pontremoli Massa-Carrara'], destination: 'La Spezia' },
 		{ origin: 'La Spezia', waypoints: ['Pugliola','Sarzana','Viareggio'], destination: 'Lucca' },
 		{ origin: 'Lucca', waypoints: ['Altopascio','Castelfiorentino','Poggibonsi','Monteriggioni'], destination: 'Siena' },
@@ -76,11 +77,12 @@ function initialize_map() {
 		{ origin: 'Perugia', waypoints: ['Assisi','Spoleto'], destination: 'Terni' },
 		{ origin: 'Terni', waypoints: ['Rieti','Borgorese'], destination: 'Avezzano' },
 		{ origin: 'Avezzano', waypoints: ['Pescasseroli'], destination: 'Opi' },
-		{ origin: 'Opi', waypoints: ['Alfedena','Isernia','Bojano'], destination: 'Vinchiaturo' }
+		{ origin: 'Opi', waypoints: ['Alfedena','Isernia','Bojano'], destination: 'Vinchiaturo' },
+		{ origin: 'Vinchiaturo', waypoints: ['Jelsi', 'Volturara Appula', 'Motta Montecorvino Foggia', 'Foggia', '41.429407,15.66302', 'Corso Giuseppe Garibaldi, Trinitapoli'], destination: 'Via Nazareth 18, Barletta', avoidHighways: false }		
 	];
 
     $.each(confirmed_route, function() {
-		var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: true, suppressMarkers: true });	
+		var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: false, suppressMarkers: true });	
 		directionsService.route(directionsRequestFor(this),
 		function(response, status) {
 		    if (status == google.maps.DirectionsStatus.OK) {
@@ -101,8 +103,7 @@ function directionsRequestFor(data) {
 	    origin: data.origin,
 	    destination: data.destination,
 	    waypoints: $.map(data.waypoints, function(w, i) { return { location: w, stopover: false} }),
-	    avoidHighways: true,
-	    avoidTolls: true,
+	    avoidHighways: (typeof data.avoidHighways === 'undefined') ? true : data.avoidHighways,
 	    provideRouteAlternatives: false,
 	    travelMode: google.maps.DirectionsTravelMode.DRIVING,
 	    unitSystem: google.maps.UnitSystem.METRIC
