@@ -68,15 +68,15 @@ function initialize_map() {
 	var confirmed_route = [
 		{ origin: 'Chiasso, Switzerland', waypoints: ['Lainate Milan, Italy','Rho Milan, Italy','Cusago Milan, Italy'], destination: 'Rosate Milan, Italy' },
 		 { origin: 'Rosate Milan, Italy', waypoints: ['Motta Visconti Milan','Pavia','Casteggio','Montalto Pavese Pavia','Lirio Pavia','Rocca de\' Giorgi Pavia'], destination: 'Nibbiano Piacenza, Italy' },
-		{ origin: 'Nibbiano Piacenza, Italy', waypoints: ['Pecorara','Bobbio'], destination: '29024 Ferriere Piacenza, Italy' }, // marzonago
-		{ origin: '29024 Ferriere Piacenza, Italy', waypoints: ['Selva, Ferriere Piacenza, Italy','43041 Bedonia Parma','54027 Pontremoli Massa-Carrara'], destination: 'La Spezia' },
-		{ origin: 'La Spezia', waypoints: ['Pugliola','Sarzana','Viareggio'], destination: 'Lucca' },
-		{ origin: 'Lucca', waypoints: ['Altopascio','Castelfiorentino','Poggibonsi','Monteriggioni'], destination: 'Siena' },
+		{ origin: 'Nibbiano Piacenza, Italy', waypoints: ['Pecorara','Marzonago, Pecorara', 'Pecorara','Bobbio'], destination: '29024 Ferriere Piacenza, Italy' },
+		{ origin: '29024 Ferriere Piacenza, Italy', waypoints: ['Selva, Ferriere Piacenza, Italy','43041 Bedonia Parma','44.387037,9.884037'], destination: 'La Spezia' },
+		{ origin: 'La Spezia', waypoints: ['Pugliola','44.106016,9.95151','Viareggio'], destination: 'Lucca' },
+		{ origin: 'Lucca', waypoints: ['Pieve San Paolo, Capannori', 'Corte Stanghellini, Capannori','Altopascio','Castelfiorentino','Poggibonsi','Monteriggioni'], destination: 'Siena' },
 		{ origin: 'Siena', waypoints: ['Buonoconvento','Pienza'], destination: 'Montepulciano' },
-		{ origin: 'Montepulciano', waypoints: ['Castelione del Lago'], destination: 'Perugia' },
+		{ origin: 'Montepulciano', waypoints: ['Castelione del Lago', 'Magione'], destination: 'Perugia' },
 		{ origin: 'Perugia', waypoints: ['Assisi','Spoleto'], destination: 'Terni' },
-		{ origin: 'Terni', waypoints: ['Rieti','Borgorese'], destination: 'Avezzano' },
-		{ origin: 'Avezzano', waypoints: ['Pescasseroli'], destination: 'Opi' },
+		{ origin: 'Terni', waypoints: ['42.487463,12.766349','42.265019,13.162308','42.247962,13.185697','Borgorese'], destination: 'Avezzano' },
+		{ origin: 'Avezzano', waypoints: ['Borgo Ottomila','Pescasseroli'], destination: 'Opi' },
 		{ origin: 'Opi', waypoints: ['Alfedena','Isernia','Bojano'], destination: 'Vinchiaturo' },
 		{ origin: 'Vinchiaturo', waypoints: ['Jelsi', 'Volturara Appula', 'Motta Montecorvino Foggia', 'Foggia', '41.429407,15.66302', 'Corso Giuseppe Garibaldi, Trinitapoli'], destination: 'Via Nazareth 18, Barletta', avoidHighways: false }		
 	];
