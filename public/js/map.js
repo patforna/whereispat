@@ -38,10 +38,10 @@ function initialize_map() {
 
     $.each(route.places, function() {
         //expand the bounds to fit each previous location...
-        bounds.extend(new google.maps.LatLng(this.latitude, this.longitude));
-
+        bounds.extend(new google.maps.LatLng(this.latitude, this.longitude));        
+     
         //build the probable route
-        if (Date.parse(this.visited_at) > Date.parse("2012-04-23 18:46:41 +0200")) {
+        if (Date.parse(this.visited_at) > Date.parse("2012-04-22 16:33:00 +0200")) {
           probable_route.push(new google.maps.LatLng(this.latitude, this.longitude));
         }
 
