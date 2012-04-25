@@ -82,7 +82,7 @@ function initialize_map() {
 	];
 
     $.each(confirmed_route, function() {
-		var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: false, suppressMarkers: true });	
+		var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: true, suppressMarkers: true });	
 		directionsService.route(directionsRequestFor(this),
 		function(response, status) {
 		    if (status == google.maps.DirectionsStatus.OK) {
