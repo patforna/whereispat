@@ -50,12 +50,10 @@
 		.data(distance_time_speeds_array)
 		.left(function(d){  var value = d.culmulative_time_in_hours;
 							var scaledValue = timeScale(value);
-							console.log(""+this.index+" - "+value+" -> "+scaledValue);
 							return scaledValue;
 						})
 		.bottom(function(d){var value = d.speed_in_kph;
 							var scaledValue = speedScale(value);
-							console.log(""+this.index+" - "+value+" -> "+scaledValue);
 							return scaledValue;})
 		.lineWidth(2).add(pv.Dot);
 	
