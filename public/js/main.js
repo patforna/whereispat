@@ -1,3 +1,3 @@
 $(document).ready(function() {
-	initialize_map()
+	whereispat.map().render();
 });
