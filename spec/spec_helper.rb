@@ -1,6 +1,7 @@
 # unit tests
 require 'place'
 require 'route'
+require 'helpers'
 require 'json_spec'
 
 # functional tests
@@ -10,6 +11,7 @@ require 'rack/test'
 require 'webmock/rspec'
 
 RSpec.configure do |conf|
+  conf.include Helpers
   conf.include Rack::Test::Methods
   conf.include WebMock::API
 end

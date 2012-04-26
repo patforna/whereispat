@@ -3,6 +3,7 @@ require 'twitter'
 require 'geokit'
 require './lib/place'
 require './lib/route'
+require './lib/helpers'
 
 Geokit::default_units = :kms
 Geokit::default_formula = :sphere
@@ -62,4 +63,8 @@ get '/' do
   @how_far_might_he_have_gone = @hours_since_last_tweet * average_cycling_speed_mph
 
   erb :index
+end
+
+helpers do 
+  include Helpers
 end
