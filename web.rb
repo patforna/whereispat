@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'twitter'
 require 'geokit'
+require './lib/tweet'
 require './lib/place'
 require './lib/route'
 require './lib/helpers'
@@ -9,7 +10,6 @@ Geokit::default_units = :kms
 Geokit::default_formula = :sphere
 
 average_cycling_speed_mph = 5
-START_DATE = Time.new(2012,4,10)
 
 configure :production do
   Twitter.configure do |config|                        
@@ -22,8 +22,8 @@ configure :production do
 end
 
 get '/' do
-  tweets = Twitter.user_timeline("patforna", :count => 50).select { |t| t.created_at > START_DATE }
-  @last_tweet = tweets.select { |t| !t.text.include? '#whereispat'}.first
+  tweets = Tweet.load
+  @last_tweet = tweets.first
   @route = Route.from(tweets)
   @last_place = @route.last_place
   
