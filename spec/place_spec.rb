@@ -39,22 +39,33 @@ describe Place do
   end
   
   describe "compute name of place" do
-    it "should use Twitter API to reverse geocode latitude and longitude" do
-      latitude, longitude, name = 40, 10, 'foo'
-      twitter_results = [Twitter::Place.new('full_name' => name)]
-      Twitter.should_receive(:reverse_geocode).with(hash_including(:lat => latitude, :long => longitude)).and_return(twitter_results)
-      Place.new(latitude, longitude).name.should == name
+    it "should use Google API to reverse geocode latitude and longitude" do
+      latitude, longitude, city, country = 40, 10, 'Foo', 'Bar'
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).with(Geokit::LatLng.new(latitude, longitude)).and_return(geoLocFor(city, country))
+      Place.new(latitude, longitude).name.should == "#{city}, #{country}"
     end
     
-    it "should use cache response from Twitter" do
-      Twitter.should_receive(:reverse_geocode)
+    it "should use cache response computed on reverse geocoding" do
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode)
       place = Place.new
       place.name
       place.name
+    end    
+    
+    it "should ignore city if not present" do
+      city, country = nil, 'Bar'
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_return(geoLocFor(city, country))
+      Place.new(0, 0).name.should == "#{country}"
     end
     
+    it "should fall back to sensible message if neither city nor country are present" do
+      city, country = nil, nil
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_return(geoLocFor(city, country))
+      Place.new(0, 0).name.should == "Not sure the name of the place"
+    end    
+    
     it "should fall back to sensible message when things go haywire" do
-      Twitter.should_receive(:reverse_geocode).and_raise(:boom)
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_raise(:boom)
       Place.new(0, 0).name.should == "Not sure the name of the place"
     end    
   end
@@ -82,6 +93,13 @@ describe Place do
     place = Place.parse tweet
     place.latitude.should == latitude
     place.longitude.should == longitude      
+  end
+  
+  def geoLocFor(city, country)
+    result = Geokit::GeoLoc.new
+    result.city = city
+    result.country = country
+    result
   end
 
 end

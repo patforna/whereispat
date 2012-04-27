@@ -1,7 +1,9 @@
 require 'json'
+require 'geokit'
 
 class Place
   LAT_LONG_PATTERN = /(^|(.* ))(-?\d+\.\d+),(-?\d+\.\d+)( .*|$)/
+  UNKNOWN = "Not sure the name of the place"
   
   attr_reader :latitude, :longitude, :visited_at
   
@@ -39,9 +41,10 @@ class Place
   private
   def compute_name
     begin
-      Twitter.reverse_geocode(:lat => @latitude, :long => @longitude, :max_results => 1, :granularity => "city").first.full_name
+      geoLoc = Geokit::Geocoders::GoogleGeocoder.reverse_geocode(GeoKit::LatLng.new(latitude, longitude))
+      geoLoc.city || geoLoc.country ? [geoLoc.city, geoLoc.country].compact.join(', ') : UNKNOWN
     rescue
-      "Not sure the name of the place"
+      UNKNOWN
     end
   end
   
