@@ -126,11 +126,21 @@ var whereispat = {
                 waypoints: ['Jelsi', 'Volturara Appula', 'Motta Montecorvino Foggia', 'Foggia', '41.429407,15.66302', 'Corso Giuseppe Garibaldi, Trinitapoli'],
                 destination: 'Via Nazareth 18, Barletta',
                 avoidHighways: false
+            },
+            {
+                origin: 'Via Nazareth 18, Barletta',
+                waypoints: ['Trani', 'Bisceglie', 'Molfetta', 'Giovinazzo'],
+                destination: 'Bari'
+            },
+			{
+                origin: 'Durrës, Albania',
+                destination: 'Berat, Albania',
+                avoidHighways: false
             }
             ];
 
             $.each(confirmed_route, function() {
-                var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: true, suppressMarkers: true });
+                var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: true, suppressMarkers: true });                
                 directionsService.route(directionsRequestFor(this),
                 function(response, status) {
                     if (status == google.maps.DirectionsStatus.OK) {
@@ -139,16 +149,28 @@ var whereispat = {
                         console.log("Request to direction service failed. Status: " + status);
                     }
                 });
-
             });
+
+            var publicTransport = [];
+            publicTransport.push(new google.maps.LatLng('41.133581','16.866534')); // Bari
+            publicTransport.push(new google.maps.LatLng('41.316929','19.45464'));  // Durres
+            
+            new google.maps.Polyline({
+                map: map,
+                path: publicTransport,
+                strokeColor: "#FF4000",
+                strokeOpacity: 0.5,
+                strokeWeight: 4,
+                geodesic: true
+            });            
 
         };
 
         function showProbableRoute() {
             var probableRoute = [];
             $.each(route.places, function() {
-                if (Date.parse(this.visited_at) > Date.parse("2012-04-23 18:46:41 +0200")) {
-                    console.log("This tweet happened after the manual route mapping: " + this.visited_at);
+                if (Date.parse(this.visited_at) > Date.parse("2012-04-27 08:51:10 +0200.")) {
+                    console.log("This tweet happened after the manual route mapping: " + this.visited_at + ". Tweeted from: " + this.latitude + "," + this.longitude);
                     probableRoute.push(new google.maps.LatLng(this.latitude, this.longitude));
                 }
             });
@@ -157,8 +179,8 @@ var whereispat = {
                 map: map,
                 path: probableRoute,
                 strokeColor: "#257890",
-                strokeOpacity: 0.8,
-                strokeWeight: 3,
+                strokeOpacity: 0.5,
+                strokeWeight: 4,
                 geodesic: true
             });
         };
@@ -167,12 +189,19 @@ var whereispat = {
             return {
                 origin: data.origin,
                 destination: data.destination,
-                waypoints: $.map(data.waypoints, function(w, i) { return { location: w, stopover: false } }),
+                waypoints: waypointsFor(data),
                 avoidHighways: (typeof data.avoidHighways === 'undefined') ? true: data.avoidHighways,
                 provideRouteAlternatives: false,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING,
                 unitSystem: google.maps.UnitSystem.METRIC
             };
+        };
+
+        function waypointsFor(data) {
+          if (data.waypoints) 
+            $.map(data.waypoints, function(w, i) { return { location: w, stopover: false } })
+          else
+            []
         };
 
         function fitBounds() {
