@@ -11,7 +11,7 @@ Geokit::default_formula = :sphere
 average_cycling_speed_mph = 5
 START_DATE = Time.new(2012,4,10)
 
-configure do # :production do
+configure :production do
   Twitter.configure do |config|                        
     config.endpoint = 'http://' + ENV['APIGEE_TWITTER_API_ENDPOINT']     
     config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
