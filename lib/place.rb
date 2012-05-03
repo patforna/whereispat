@@ -41,8 +41,7 @@ class Place
   private
   def compute_name
     begin
-      geoLoc = Geokit::Geocoders::GoogleGeocoder.reverse_geocode(GeoKit::LatLng.new(latitude, longitude))
-      geoLoc.city || geoLoc.country ? [geoLoc.city, geoLoc.country].compact.join(', ') : UNKNOWN
+      Geokit::Geocoders::GoogleGeocoder.reverse_geocode(GeoKit::LatLng.new(latitude, longitude)).full_address
     rescue
       UNKNOWN
     end
