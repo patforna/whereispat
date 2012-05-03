@@ -47,6 +47,21 @@ describe Place do
       Place.new(latitude, longitude).name.should == "Foo, Bar"
     end
     
+    it "should limit to last two address components if there are more" do
+      geoLoc = double('geoLoc')
+      geoLoc.should_receive(:full_address).and_return("Foo, Bar, Baz")      
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_return(geoLoc)
+      Place.new(0, 0).name.should == "Bar, Baz"
+    end    
+    
+    it "should get rid of numbers in address components" do
+      geoLoc = double('geoLoc')
+      geoLoc.should_receive(:full_address).and_return("Foo, Bar 11234, Baz")      
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_return(geoLoc)
+      Place.new(0, 0).name.should == "Bar, Baz"
+    end    
+    
+    
     it "should use cache response computed on reverse geocoding" do
       Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode)
       place = Place.new

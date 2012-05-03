@@ -41,7 +41,11 @@ class Place
   private
   def compute_name
     begin
-      Geokit::Geocoders::GoogleGeocoder.reverse_geocode(GeoKit::LatLng.new(latitude, longitude)).full_address
+      address = Geokit::Geocoders::GoogleGeocoder.reverse_geocode(GeoKit::LatLng.new(latitude, longitude)).full_address
+      parts = address.split(', ')
+      parts = parts.drop parts.length - 2 if parts.length > 2
+      parts = parts.map {|p| p.gsub(/ \d+/, '') }
+      parts.join(', ')
     rescue
       UNKNOWN
     end
