@@ -5,11 +5,10 @@ html {
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
-  line-height: 18px;
   color: #333;
   background-color: white;
   margin: 0px;
-  padding: 0;
+  padding: 0px;
   width: 100%;    
 }
 
@@ -24,21 +23,25 @@ h1 {
   font-weight: bold;
   letter-spacing: -0.05em;
   color: #111;
-  padding-bottom: 10px;
-  margin-bottom: 30px;
-  margin-top: 30px;  
+  float: left;
+  margin: 0px;
+  padding: 0px;
+}
+
+.social {
+  padding-top: 10px;
+  text-align: right;
 }
 
 .tweet {
   background-color: black;
-  margin-top: 27px;
-  margin-bottom:30px;
-  width: 940px;
+  margin-top: 10px;
+  margin-bottom:20px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
   float: left;
-  padding-top: 18px;
+  padding-top: 15px;
   padding-bottom: 15px;
 }
 
@@ -50,7 +53,10 @@ h1 {
 } 
 
 .tweet ul {
-  list-style: none;
+  list-style-type: none;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin: 0px;
 }
 
 .tweet .title {
