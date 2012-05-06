@@ -5,7 +5,7 @@ class Tweet
   
   def self.load() 
     begin
-      @@tweets = Twitter.user_timeline("patforna", :count => 50).select { |t| t.created_at > START_DATE }
+      @@tweets = Twitter.user_timeline("patforna", :count => 50, :exclude_replies => true).select { |t| t.created_at > START_DATE }
     rescue => e
       puts 'Failed to get tweets from Twitter. Falling back to last known tweets. ' + e.message
       @@tweets
