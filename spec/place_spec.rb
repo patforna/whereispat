@@ -54,13 +54,19 @@ describe Place do
       Place.new(0, 0).name.should == "Bar, Baz"
     end    
     
-    it "should get rid of numbers in address components" do
+    it "should get rid of numbers in address components - at beginning" do
       geoLoc = double('geoLoc')
       geoLoc.should_receive(:full_address).and_return("Foo, Bar 11234, Baz")      
       Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_return(geoLoc)
       Place.new(0, 0).name.should == "Bar, Baz"
     end    
-    
+
+    it "should get rid of numbers in address components - at end" do
+      geoLoc = double('geoLoc')
+      geoLoc.should_receive(:full_address).and_return("11234 Bar, Baz")      
+      Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode).and_return(geoLoc)
+      Place.new(0, 0).name.should == "Bar, Baz"
+    end        
     
     it "should use cache response computed on reverse geocoding" do
       Geokit::Geocoders::GoogleGeocoder.should_receive(:reverse_geocode)
