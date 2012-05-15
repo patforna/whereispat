@@ -25,7 +25,7 @@
 						<span class="detail">| <span class="latitude"><%= @last_place.latitude %></span>, <span class="longitude"><%= @last_place.longitude %></span></span>
 						<span class="detail">| <%= ago_in_words(@last_place.visited_at) %></span>
 					</li>					
-					<% if @hours_since_last_tweet > 0 %>
+					<% if @hours_since_last_place > 0 %>
 					<li class="freshness">
 						<span class="title">Freshness:</span>
 						<span class="value">It's been some time since his last locatable tweet - he could be <span class="how-far"><%= @how_far_might_he_have_gone %></span> miles away by now</span>

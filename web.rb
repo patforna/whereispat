@@ -71,8 +71,8 @@ get '/' do
     {:distance_in_kilometers => distance,:culmulative_distance_in_kilometers => culmulative_distance, :culmulative_time_in_hours => culmulative_time, :time_diff_in_hours => time_between_locations, :speed_in_kph => speed}
   }
 
-  @hours_since_last_tweet = ((Time.new() - @last_tweet.created_at) / 3600).round
-  @how_far_might_he_have_gone = @hours_since_last_tweet * average_cycling_speed_mph
+  @hours_since_last_place = ((Time.new() - @last_place.visited_at) / 3600).round
+  @how_far_might_he_have_gone = @hours_since_last_place * average_cycling_speed_mph
 
   erb :index
 end
