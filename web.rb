@@ -16,7 +16,7 @@ average_cycling_speed_mph = 5
 configure do
   $cache = Dalli::Client.new
   use Rack::Cache, :verbose => true, :metastore => $cache, :entitystore => $cache, :allow_reload => false
-  set :static_cache_control, [:public, :max_age => 300]
+  set :static_cache_control, [:public, :max_age => 60]
 end
 
 configure :production do
@@ -30,7 +30,7 @@ configure :production do
 end
 
 before do
-  cache_control :public, :max_age => 1 * 60
+  cache_control :public, :max_age => 60
 end
 
 get '/' do
