@@ -61,7 +61,7 @@ var whereispat = {
             var directionsService = new google.maps.DirectionsService();
 
             var confirmed_route = [
-            {
+{
                 origin: 'Chiasso, Switzerland',
                 waypoints: ['Lainate Milan, Italy', 'Rho Milan, Italy', 'Cusago Milan, Italy'],
                 destination: 'Rosate Milan, Italy'
@@ -136,6 +136,59 @@ var whereispat = {
                 origin: 'Durrës, Albania',
                 destination: 'Berat, Albania',
                 avoidHighways: false
+            },
+			{
+                origin: 'Berat, Albania',
+                destination: 'Gjirokastër, Albania'
+            },
+			{
+                origin: 'Gjirokastër, Albania',
+                destination: '39.67191731,20.86131522' // ioannina
+            },
+			{
+                origin: '39.67191731,20.86131522', // ioannina
+                destination: '39.772033,21.178511' // metsovo
+            },
+			{
+                origin: '39.772033,21.178511', // metsovo
+                destination: '39.71045093,21.62997874' // kalabaka
+            },
+			{
+                origin: '39.71045093,21.62997874', // kalabaka
+                destination: '39.63778897,22.41862245' // larissa
+            },
+			{
+                origin: '39.63778897,22.41862245', // larissa
+                destination: 'Litochoro, Greece',
+                avoidHighways: false
+            },
+			{
+                origin: 'Litochoro, Greece',
+                destination: '40.63900973,22.95781461', // thessalonika
+            },
+			{
+                origin: '40.63900973,22.95781461', // thessalonika
+                destination: '40.93657563,24.41051493' // kavala
+            },
+			{
+                origin: '40.93657563,24.41051493', // kavala
+                waypoints: ['Xanthi', 'Amaxades', 'Komotini', 'Kirki, Greece'],
+                destination: '40.84458697,25.87747196' // alexandroupouli
+            },
+			{
+                origin: '40.84458697,25.87747196', // alexandroupouli
+                waypoints: ['Feres, Evros, Greece'],
+                destination: '40.85298275,26.63251966', // kesan
+                avoidHighways: false
+            },
+			{
+                origin: '40.85298275,26.63251966', // kesan
+                destination: '41.019912,27.851597' // between kesan and istanbul
+            },
+			{
+                origin: '41.019912,27.851597', // between kesan and istanbul
+                waypoints: ['Yeşilköy-Bakırköy Sahil Yolu'],
+                destination: '41.03502693,28.97670541' // istanbul
             }
             ];
 
@@ -169,7 +222,7 @@ var whereispat = {
         function showProbableRoute() {
             var probableRoute = [];
             $.each(route.places, function() {
-                if (Date.parse(this.visited_at) > Date.parse("2012-04-27 08:51:10 +0200.")) {
+                if (Date.parse(this.visited_at) > Date.parse("2012-05-10 22:01:22 +0300")) {
                     console.log("This tweet happened after the manual route mapping: " + this.visited_at + ". Tweeted from: " + this.latitude + "," + this.longitude);
                     probableRoute.push(new google.maps.LatLng(this.latitude, this.longitude));
                 }
@@ -199,9 +252,9 @@ var whereispat = {
 
         function waypointsFor(data) {
           if (data.waypoints) 
-            $.map(data.waypoints, function(w, i) { return { location: w, stopover: false } })
+            return $.map(data.waypoints, function(w, i) { return { location: w, stopover: false } })
           else
-            []
+            return []
         };
 
         function fitBounds() {

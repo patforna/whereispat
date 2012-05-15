@@ -16,7 +16,6 @@ average_cycling_speed_mph = 5
 configure do
   $cache = Dalli::Client.new
   use Rack::Cache, :verbose => true, :metastore => $cache, :entitystore => $cache, :allow_reload => false
-  set :static_cache_control, [:public, :max_age => 60]
 end
 
 configure :production do
@@ -27,6 +26,7 @@ configure :production do
     config.oauth_token = ENV['TWITTER_OAUTH_TOKEN']
     config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
   end
+  set :static_cache_control, [:public, :max_age => 60]  
 end
 
 before do
