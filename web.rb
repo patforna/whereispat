@@ -8,14 +8,16 @@ require './lib/place'
 require './lib/route'
 require './lib/helpers'
 
-$cache = Dalli::Client.new
-
-use Rack::Cache, :verbose => true, :metastore => $cache, :entitystore => $cache, :allow_reload => false
-
 Geokit::default_units = :kms
 Geokit::default_formula = :sphere
 
 average_cycling_speed_mph = 5
+
+configure do
+  $cache = Dalli::Client.new
+  use Rack::Cache, :verbose => true, :metastore => $cache, :entitystore => $cache, :allow_reload => false
+  set :static_cache_control, [:public, :max_age => 300]
+end
 
 configure :production do
   Twitter.configure do |config|                        
@@ -27,8 +29,11 @@ configure :production do
   end
 end
 
-get '/' do
+before do
   cache_control :public, :max_age => 1 * 60
+end
+
+get '/' do
   tweets = Tweet.load
   @last_tweet = tweets.first
   @route = Route.from(tweets)
