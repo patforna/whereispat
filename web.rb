@@ -1,10 +1,16 @@
 require 'sinatra'
 require 'twitter'
 require 'geokit'
+require 'dalli'
+require 'rack-cache'
 require './lib/tweet'
 require './lib/place'
 require './lib/route'
 require './lib/helpers'
+
+$cache = Dalli::Client.new
+
+use Rack::Cache, :verbose => true, :metastore => $cache, :entitystore => $cache, :allow_reload => false
 
 Geokit::default_units = :kms
 Geokit::default_formula = :sphere
@@ -22,6 +28,7 @@ configure :production do
 end
 
 get '/' do
+  cache_control :public, :max_age => 1 * 60
   tweets = Tweet.load
   @last_tweet = tweets.first
   @route = Route.from(tweets)
