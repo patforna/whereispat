@@ -17,7 +17,7 @@
 			<div class="tweet">
 				<ul>
 					<li class="last-tweet">
-						<span class="title">Last tweet:</span> <span class="value"><%= @last_tweet.text %></span> <span class="detail">| <%= ago_in_words(@last_tweet.created_at) %></span>
+						<span class="title">Last tweet:</span> <span class="value"><%= auto_link(@last_tweet.text) %></span> <span class="detail">| <%= ago_in_words(@last_tweet.created_at) %></span>
 					</li>
 					<li class="last-location">
 						<span class="title">Last known location:</span>
