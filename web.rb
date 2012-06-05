@@ -26,11 +26,11 @@ configure :production do
     config.oauth_token = ENV['TWITTER_OAUTH_TOKEN']
     config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
   end
-  set :static_cache_control, [:public, :max_age => 60]  
+  set :static_cache_control, [:public, :max_age => 6000]  
 end
 
 before do
-  cache_control :public, :max_age => 60
+  cache_control :public, :max_age => 6000
 end
 
 get '/' do
