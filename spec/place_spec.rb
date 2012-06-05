@@ -13,6 +13,11 @@ describe Place do
       tweet = Twitter::Status.new('created_at' => time.to_s)
       Place.parse(tweet).visited_at.should == time
     end
+    
+    it "should know what message was tweeted at this place" do
+      tweet = tweet("foo")
+      Place.parse(tweet).tweet == tweet
+    end    
   end
                                                 
   describe "parse tweet with no implicit geo data" do
@@ -96,8 +101,14 @@ describe Place do
   describe "json serialisation" do
     it "should serialise fields to JSON" do
       now_ish = Time.now
-      Place.new(1.1, 2.2,now_ish).to_json.should be_json_eql(%({"latitude":1.1,"longitude":2.2, "visited_at":"#{now_ish}"}))
+      tweet = tweet("foo")
+      Place.new(1.1, 2.2,now_ish,tweet).to_json.should be_json_eql(%({"latitude":1.1, "longitude":2.2, "visited_at":"#{now_ish}", "tweet":"foo"}))
     end
+    
+    it "should HTML escape tweet message" do
+      Place.parse(tweet('some "double" quotes')).to_json.should include('some &quot;double&quot; quotes')
+    end
+    
   end
   
   def should_parse(tweet, latitude, longitude)

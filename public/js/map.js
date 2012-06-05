@@ -3,8 +3,9 @@ whereispat.map = function() {
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
 
-    var instance = {};
+    var instance = {};	
     var map = createMap();
+    var infoWindow = new google.maps.InfoWindow();
 
     instance.render = function(route, tweetedRoute) {
         showCurrentLocation();
@@ -16,7 +17,12 @@ whereispat.map = function() {
     };
 
     function createMap() {
-        return new google.maps.Map($('#map_canvas')[0], { center: currentLocation(), zoom: 7, mapTypeId: google.maps.MapTypeId.TERRAIN });
+        var map = new google.maps.Map($('#map_canvas')[0], { center: currentLocation(), zoom: 7, mapTypeId: google.maps.MapTypeId.TERRAIN });
+		// 	    google.maps.event.addListener(map, 'click', function() {
+		//     infoWindow.close(map, marker);
+		// });
+
+        return map;
     };
 
     function currentLocation() {
@@ -47,11 +53,18 @@ whereispat.map = function() {
 
     function showTweets(tweetedRoute) {
         $.each(tweetedRoute.places, function() {
-            new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(this.latitude, this.longitude),
                 map: map,
                 icon: TWITTER_IMAGE
             });
+
+            var tweet = this.tweet;
+			
+            google.maps.event.addListener(marker, 'click', function() {
+	            infoWindow.setContent(tweet);
+			    infoWindow.open(map, marker);
+			});			
         });
     };
 
