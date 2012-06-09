@@ -1,4 +1,6 @@
 whereispat.map = function() {
+	
+	var LAST_ROUTE_UPDATE = "2012-06-07 20:55:32 +0300"
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
@@ -100,7 +102,7 @@ whereispat.map = function() {
     function showProbableRoute(tweetedRoute) {
         var probableRoute = [];
         $.each(tweetedRoute.places, function() {
-            if (Date.parse(this.visited_at) > Date.parse("2012-06-04 15:28:32 +0300")) {
+            if (Date.parse(this.visited_at) > Date.parse(LAST_ROUTE_UPDATE)) {
                 console.log("This tweet happened after the manual route mapping: " + this.visited_at + ". Tweeted from: " + this.latitude + "," + this.longitude);
                 probableRoute.push(new google.maps.LatLng(this.latitude, this.longitude));
             }
