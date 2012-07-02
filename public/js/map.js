@@ -1,7 +1,7 @@
 whereispat.map = function() {
 	
 	var PRESERVE_VIEWPORT = true
-	var LAST_ROUTE_UPDATE = "2012-06-19 07:41:38 +0000"
+	var LAST_ROUTE_UPDATE = "2012-06-30 11:30:00 +0000"
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));

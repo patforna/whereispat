@@ -155,8 +155,11 @@ whereispat.route = [
 },
 {
     origin: 'Doğubeyazıt/Ağrı Province, Turkey',
-    // waypoints: ['Gümüşhane', 'Erzurum'],
     destination: 'Tehran, Iran'
+},
+{
+    origin: 'Tehran, Iran',
+    waypoints: ['Amol', 'Bojnurd, Iran'],
+    destination: 'Mashhad, Iran'
 }
-
 ];
