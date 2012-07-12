@@ -161,5 +161,13 @@ whereispat.route = [
     origin: 'Tehran, Iran',
     waypoints: ['Amol', 'Bojnurd, Iran'],
     destination: 'Mashhad, Iran'
+},
+{
+    origin: 'Mashhad, Iran',
+    destination: '37.591419,61.809983' // Mary
+},
+{
+    origin: 'Turkmenabat, Turkmenistan',
+    destination: 'Bukhara, Uzbekistan'
 }
 ];
