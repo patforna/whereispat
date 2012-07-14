@@ -1,7 +1,7 @@
 whereispat.map = function() {
 	
 	var PRESERVE_VIEWPORT = true
-	var LAST_ROUTE_UPDATE = "2012-07-10 10:18:19 +0000"
+	var LAST_ROUTE_UPDATE = "2012-07-13 13:41:49 +0000"
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
@@ -74,6 +74,7 @@ whereispat.map = function() {
                 if (status == google.maps.DirectionsStatus.OK) {
 		            var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: PRESERVE_VIEWPORT, suppressMarkers: true });                	
                     directionsRenderer.setDirections(response);
+                    // geoCode(response.routes[0]);
                 } else {
                     console.log("Request to direction service failed. Status: " + status);
                 }
@@ -83,6 +84,23 @@ whereispat.map = function() {
         showNotCycledLeg(new google.maps.LatLng('41.133581','16.866534'), new google.maps.LatLng('41.316929','19.45464')); // bari -> durres
         showNotCycledLeg(new google.maps.LatLng('41.016612','28.977127'), new google.maps.LatLng('41.009973','29.017231')); // bosphorus
         showNotCycledLeg(new google.maps.LatLng('37.591419','61.809983'), new google.maps.LatLng('39.100759','63.57032')); // mary->turkmenabat
+    };
+
+    function geoCode(route) {
+		var geo_data = [];
+		console.log('legs: ' + route.legs.length)
+		$.each(response.routes[0].legs, function(i, leg) {
+		console.log('steps: ' + leg.steps.length)						
+		  $.each(leg.steps, function(j, step) {
+			
+		    $.each(step.path, function(k, point) {
+			    geo_data.push(point.toString());
+			});						
+		  });
+		});
+		
+		console.log('geo_data: ' + geo_data.length)												
+		console.log(geo_data)													
     };
 
     function showNotCycledLeg(from, to) {
