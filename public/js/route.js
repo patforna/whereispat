@@ -168,6 +168,7 @@ whereispat.route = [
 },
 {
     origin: 'Turkmenabat, Turkmenistan',
-    destination: 'Bukhara, Uzbekistan'
+    waypoints: ['Bukhara, Uzbekistan'],
+    destination: 'Samarkand, Uzbekistan'
 }
 ];
