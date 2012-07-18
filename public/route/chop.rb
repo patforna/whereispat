@@ -12,4 +12,4 @@ open('all.geo', "r+").read.split.each_with_index do |line, i|
 end
 
 # puts points.length
-puts "points = ['#{points.join("','")}'];"
+puts "[\"#{points.join('","')}\"]"
