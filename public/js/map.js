@@ -83,7 +83,8 @@ whereispat.map = function() {
 				     strokeColor: "#257890",
 				     strokeOpacity: 1,
 				     strokeWeight: 5,
-				     geodesic: true
+				     geodesic: true,
+				     zIndex: 0,
 				 });
 			},
 			error: function(qXHR, textStatus, errorThrown) {
@@ -136,7 +137,8 @@ whereispat.map = function() {
             strokeColor: "#FF4000",
             strokeOpacity: 0.5,
             strokeWeight: 4,
-            geodesic: true
+            geodesic: true,
+            zIndex: 1
         });
     };
 
