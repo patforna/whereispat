@@ -1,5 +1,10 @@
 # removes noise around lat/lngs and puts each one on a new line
-# perl -pi -w -e 's/\[|\]|\(|\)|\s//g;' `find . | grep .geo$` && perl -pi -w -e 's/\, [^0-9]/\n/g;' `find . | grep .geo$` && perl -pi -w -e 's/"//g;' `find . | grep .geo$` && for i in `ls *.geo`; do echo >> $i; done;
+# perl -pi -w -e 's/\[|\]|\(|\)|\s//g;' tmp.geo && perl -pi -w -e 's/\, [^0-9]/\n/g;' tmp.geo
+# sed 's/"\,"/*/g' tmp.geo | tr '*' '\n' > new.geo
+# perl -pi -w -e 's/"//g;' new.geo
+# echo >> new.geo
+# rm tmp.geo
+# mv new.geo 
   
 require 'geokit'
 

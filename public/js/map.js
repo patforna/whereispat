@@ -1,7 +1,6 @@
 whereispat.map = function() {
 	
-	var PRESERVE_VIEWPORT = true
-	var LAST_ROUTE_UPDATE = "2012-07-13 13:41:49 +0000"
+	var LAST_ROUTE_UPDATE = "2012-07-27 15:09:58 +0600"
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
@@ -69,7 +68,7 @@ whereispat.map = function() {
     function showRoute() {
 	
 	    $.ajax({
-			url: 'route/chiasso-samarkand-1000.json',
+			url: 'route/chiasso-osh-1000.json',
 			dataType: 'json',
 			success: function(points) {
 				latLongs = $.map(points, function(point, i) {
@@ -97,15 +96,15 @@ whereispat.map = function() {
         showNotCycledLeg(new google.maps.LatLng('37.591419','61.809983'), new google.maps.LatLng('39.100759','63.57032')); // mary->turkmenabat		
     };
 
-    function computeDirections(route) {
+    instance.computeDirections = function(route) {
         var directionsService = new google.maps.DirectionsService();
         $.each(route, function(i, leg) {
             directionsService.route(directionsRequestFor(leg),
             function(response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-		            var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: PRESERVE_VIEWPORT, suppressMarkers: true });                	
+		            var directionsRenderer = new google.maps.DirectionsRenderer({ map: map, preserveViewport: false, suppressMarkers: true });                	
                     directionsRenderer.setDirections(response);
-                    geoCode(response.routes[0]);
+                    geoCode(response);
                 } else {
                     console.log("Request to direction service failed. Status: " + status);
                 }
@@ -113,10 +112,11 @@ whereispat.map = function() {
         });        
     };
 
-    function geoCode(route) {
+    function geoCode(response) {
+	    var route = response.routes[0];
 		var geo_data = [];
 		console.log('legs: ' + route.legs.length)
-		$.each(response.routes[0].legs, function(i, leg) {
+		$.each(route.legs, function(i, leg) {
 		console.log('steps: ' + leg.steps.length)						
 		  $.each(leg.steps, function(j, step) {
 			
