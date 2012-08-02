@@ -1,6 +1,6 @@
 whereispat.map = function() {
 	
-	var LAST_ROUTE_UPDATE = "2012-07-27 15:09:58 +0600"
+	var LAST_ROUTE_UPDATE = "2012-08-01 07:01:33 +0000"
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
@@ -68,7 +68,7 @@ whereispat.map = function() {
     function showRoute() {
 	
 	    $.ajax({
-			url: 'route/chiasso-osh-1000.json',
+			url: 'route/chiasso-kashgar-1000.json',
 			dataType: 'json',
 			success: function(points) {
 				latLongs = $.map(points, function(point, i) {

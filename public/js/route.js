@@ -170,10 +170,13 @@ whereispat.route = [
 //     origin: 'Turkmenabat, Turkmenistan',
 //     waypoints: ['Bukhara, Uzbekistan'],
 //     destination: 'Samarkand, Uzbekistan'
-// }
+// },
+// {
+//     origin: 'Osh, Kyrgyzstan',
+//     destination: 'Irkeshtam, Osh Province, Kyrgyzstan'
+// },
 {
-    origin: 'Samarkand, Uzbekistan',
-    waypoints: ['Gulistan, Sirdarya Province, Uzbekistan', 'Tashkent, Uzbekistan', 'Fergana, Uzbekistan'],
-    destination: 'Osh, Kyrgyzstan'
+    origin: '中国新疆维吾尔自治区克孜勒苏柯尔克孜自治州乌恰县斯木哈纳',
+    destination: 'Kashgar, Xinjiang, China'
 }
 ];
