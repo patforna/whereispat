@@ -1,6 +1,7 @@
 whereispat.map = function() {
 	
-	var LAST_ROUTE_UPDATE = "2012-08-01 07:01:33 +0000"
+	var LAST_ROUTE_UPDATE = "2012-08-17 00:00:00 +0000"
+	var ROUTE_URL = 'route/chiasso-kunming-1000.json'
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
@@ -68,7 +69,7 @@ whereispat.map = function() {
     function showRoute() {
 	
 	    $.ajax({
-			url: 'route/chiasso-kashgar-1000.json',
+			url: ROUTE_URL,
 			dataType: 'json',
 			success: function(points) {
 				latLongs = $.map(points, function(point, i) {
@@ -94,6 +95,9 @@ whereispat.map = function() {
         showNotCycledLeg(new google.maps.LatLng('41.133581','16.866534'), new google.maps.LatLng('41.316929','19.45464')); // bari -> durres
         showNotCycledLeg(new google.maps.LatLng('41.016612','28.977127'), new google.maps.LatLng('41.009973','29.017231')); // bosphorus
         showNotCycledLeg(new google.maps.LatLng('37.591419','61.809983'), new google.maps.LatLng('39.100759','63.57032')); // mary->turkmenabat		
+        showNotCycledLeg(new google.maps.LatLng('39.47039','75.9895'), new google.maps.LatLng('30.658360000000002','104.06486000000001')); // kashgar -> chengdu		
+        // showNotCycledLeg(new google.maps.LatLng('27.89449','102.26466'), new google.maps.LatLng('25.037820000000004','102.72220000000002')); // xi chan -> kunming		
+
     };
 
     instance.computeDirections = function(route) {

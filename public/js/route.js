@@ -175,8 +175,19 @@ whereispat.route = [
 //     origin: 'Osh, Kyrgyzstan',
 //     destination: 'Irkeshtam, Osh Province, Kyrgyzstan'
 // },
+// {
+//     origin: '中国新疆维吾尔自治区克孜勒苏柯尔克孜自治州乌恰县斯木哈纳',
+//     destination: 'Kashgar, Xinjiang, China'
+// },
+// {
+//     origin: 'Chengdu, Sichuan, China',
+//     waypoints: ['Xinjin, Chengdu, Sichuan, China', 'Qionglai, Chengdu, Sichuan, China', 'Ya\'an, Sichuan, China'],
+//     destination: 'Tagongxiang, Garze, Sichuan, China'
+// },
 {
-    origin: '中国新疆维吾尔自治区克孜勒苏柯尔克孜自治州乌恰县斯木哈纳',
-    destination: 'Kashgar, Xinjiang, China'
+    origin: 'Tagongxiang, Garze, Sichuan, China',
+    waypoints: ['Jiulong, Garze, Sichuan, China'],
+    destination: 'Xi Chang Shi, Liangshan, Sichuan, China'
 }
+
 ];
