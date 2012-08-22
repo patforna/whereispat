@@ -184,10 +184,21 @@ whereispat.route = [
 //     waypoints: ['Xinjin, Chengdu, Sichuan, China', 'Qionglai, Chengdu, Sichuan, China', 'Ya\'an, Sichuan, China'],
 //     destination: 'Tagongxiang, Garze, Sichuan, China'
 // },
+// {
+//     origin: 'Tagongxiang, Garze, Sichuan, China',
+//     waypoints: ['Jiulong, Garze, Sichuan, China', 'Xi Chang Shi, Liangshan, Sichuan, China'],
+//     destination: 'Kunming, Yunnan, China'
+// },
+// {
+//     origin: 'Kunming, Yunnan, China',
+//     waypoints: ['Jianshui, Honghe, Yunnan, China'],
+//     destination: 'Yuanyang, Honghe, Yunnan, China',
+//     avoidHighways: false
+// },
 {
-    origin: 'Tagongxiang, Garze, Sichuan, China',
-    waypoints: ['Jiulong, Garze, Sichuan, China'],
-    destination: 'Xi Chang Shi, Liangshan, Sichuan, China'
+    origin: 'Yuanyang, Honghe, Yunnan, China',
+    destination: 'Hekou, Honghe, Yunnan, China'
 }
+
 
 ];
