@@ -16,8 +16,8 @@ whereispat.map = function() {
     instance.render = function(route, tweetedRoute) {
 	    showStartAndEndLocations();
         // showCurrentLocation();
-        showTweets(tweetedRoute);
         showRoute();
+        showTweets(tweetedRoute);
         // showHowFarCircle();
         showProbableRoute(tweetedRoute);
         fitBounds(tweetedRoute);
