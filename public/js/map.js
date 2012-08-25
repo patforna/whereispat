@@ -18,7 +18,7 @@ whereispat.map = function() {
         // showCurrentLocation();
         showTweets(tweetedRoute);
         showRoute();
-        showHowFarCircle();
+        // showHowFarCircle();
         showProbableRoute(tweetedRoute);
         fitBounds(tweetedRoute);
     };
