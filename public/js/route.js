@@ -195,10 +195,14 @@ whereispat.route = [
 //     destination: 'Yuanyang, Honghe, Yunnan, China',
 //     avoidHighways: false
 // },
+// {
+//     origin: 'Yuanyang, Honghe, Yunnan, China',
+//     destination: 'Hekou, Honghe, Yunnan, China'
+// },
 {
-    origin: 'Yuanyang, Honghe, Yunnan, China',
-    destination: 'Hekou, Honghe, Yunnan, China'
+    origin: 'p. Lào Cai, tp. Lào Cai, Lào Cai, Việt Nam',
+    waypoints: ['Viet Tri, Phu Tho, Vietnam'],
+    destination: 'hanoi'
 }
-
 
 ];

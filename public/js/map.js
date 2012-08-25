@@ -1,7 +1,7 @@
 whereispat.map = function() {
 	
-	var LAST_ROUTE_UPDATE = "2012-08-22 00:00:00 +0000"
-	var ROUTE_URL = 'route/chiasso-hekou-1000.json'
+	var LAST_ROUTE_UPDATE = "2012-08-25 00:00:00 +0000"
+	var ROUTE_URL = 'route/chiasso-hanoi-1000.json'
 
     var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
     var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
