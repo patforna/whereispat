@@ -2,16 +2,20 @@ whereispat.map = function() {
 	
 	var LAST_ROUTE_UPDATE = "2012-08-25 00:00:00 +0000"
 	var ROUTE_URL = 'route/chiasso-hanoi-1000.json'
-
-    var BICYCLE_IMAGE = new google.maps.MarkerImage('/images/bicycle_50.png', null, null, null, null);
-    var TWITTER_IMAGE = new google.maps.MarkerImage('/images/twitter_newbird_blue.png', null, null, null, new google.maps.Size(35, 35));
+	
+    var CLOSE_ZOOM = 4;	
+    var START_MARKER = new google.maps.MarkerImage('/images/green_marker.png', null, null, null, null);
+    var END_MARKER = new google.maps.MarkerImage('/images/red_marker.png', null, null, null, null);
+    var TWITTER_MARKER = new google.maps.MarkerImage('/images/twitter_marker.png', null, null, null, null);
 
     var instance = {};	
     var map = createMap();
+    var markers = [];
     var infoWindow = new google.maps.InfoWindow();
 
     instance.render = function(route, tweetedRoute) {
-        showCurrentLocation();
+	    showStartAndEndLocations();
+        // showCurrentLocation();
         showTweets(tweetedRoute);
         showRoute();
         showHowFarCircle();
@@ -20,11 +24,35 @@ whereispat.map = function() {
     };
 
     function createMap() {
-        return new google.maps.Map($('#map_canvas')[0], { center: currentLocation(), zoom: 7, mapTypeId: google.maps.MapTypeId.TERRAIN });
+        var map = new google.maps.Map($('#map_canvas')[0], { center: currentLocation(), zoom: 7, mapTypeId: google.maps.MapTypeId.TERRAIN });
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+		  var zoomLevel = map.getZoom();
+          var showMarkers = zoomLevel >= CLOSE_ZOOM;
+          $.each(markers, function() {
+	        this.setVisible(showMarkers);
+	      });
+
+        });
+        return map;
     };
 
     function currentLocation() {
         return new google.maps.LatLng($('.latitude').text(), $('.longitude').text());
+    };
+
+    function showStartAndEndLocations() {
+        new google.maps.Marker({
+            position: new google.maps.LatLng('45.83503', '9.02684'),
+            map: map,
+            icon: START_MARKER,
+            zIndex: 5
+        });
+        new google.maps.Marker({
+            position: new google.maps.LatLng('21.03339','105.85013000000001'),
+            map: map,
+            icon: END_MARKER,
+            zIndex: 5
+        });
     };
 
     function showCurrentLocation() {
@@ -32,7 +60,7 @@ whereispat.map = function() {
             position: currentLocation(),
             map: map,
             animation: google.maps.Animation.BOUNCE,
-            icon: BICYCLE_IMAGE
+            icon: END_MARKER
         });
     };
 
@@ -54,11 +82,14 @@ whereispat.map = function() {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(this.latitude, this.longitude),
                 map: map,
-                icon: TWITTER_IMAGE
+                zIndex: 2,
+                icon: TWITTER_MARKER,
+                visible: false
             });
+            markers.push(marker);
 
             var tweet = this.tweet;
-			
+
             google.maps.event.addListener(marker, 'click', function() {
 	            infoWindow.setContent(tweet);
 			    infoWindow.open(map, marker);
@@ -150,7 +181,7 @@ whereispat.map = function() {
         var probableRoute = [];
         $.each(tweetedRoute.places, function() {
             if (Date.parse(this.visited_at) >= Date.parse(LAST_ROUTE_UPDATE)) {
-                console.log("This tweet happened after the manual route mapping: " + this.visited_at + ". Tweeted from: " + this.latitude + "," + this.longitude);
+                //console.log("This tweet happened after the manual route mapping: " + this.visited_at + ". Tweeted from: " + this.latitude + "," + this.longitude);
                 probableRoute.push(new google.maps.LatLng(this.latitude, this.longitude));
             }
         });
