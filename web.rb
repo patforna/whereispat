@@ -34,16 +34,20 @@ before do
 end
 
 get '/' do
-  tweets = Tweet.load
-  @last_tweet = tweets.first
-  @route = Route.from(tweets)
-  @last_place = @route.last_place
-
-  @hours_since_last_place = ((Time.new() - @last_place.visited_at) / 3600).round
-  @how_far_might_he_have_gone = @hours_since_last_place * average_cycling_speed_mph
-
-  erb :index
+  erb :frozen
 end
+
+# get '/' do
+#   tweets = Tweet.load
+#   @last_tweet = tweets.first
+#   @route = Route.from(tweets)
+#   @last_place = @route.last_place
+# 
+#   @hours_since_last_place = ((Time.new() - @last_place.visited_at) / 3600).round
+#   @how_far_might_he_have_gone = @hours_since_last_place * average_cycling_speed_mph
+# 
+#   erb :index
+# end
 
 helpers do 
   include Helpers
